@@ -8,13 +8,13 @@ const extractLess = new ExtractTextPlugin('./common/css/[name].css');  //跟随o
 const config = {
     entry: {
         login: './src/pages/login/login.js',
-        Vue: 'vue/dist/vue.min.js'
+        index: './src/pages/index/index.js'
     },
     output: {
         path: path.join(__dirname, '/build/'),
         filename: 'js/[name].js'
     },
-    //devtool: 'eval-source-map',
+    devtool: 'eval-source-map',
     devServer: {
         contentBase: './build',
         port: 8080,
@@ -42,7 +42,6 @@ const config = {
             },
             {
                 test: /\.less$/,
-                exclude: path.resolve(__dirname, 'node_modules'),
                 use: extractLess.extract({
                     fallback: 'style-loader',
                     use: ['css-loader', 'postcss-loader', 'less-loader']
@@ -67,9 +66,23 @@ const config = {
         new HtmlWebpackPlugin({
             template: 'login.html',
             filename: 'login.html',  //目录随output
-            hash: false, //哈希模式, 引入的JS CSS都会加一个哈希值
+            hash: true, //哈希模式, 引入的JS CSS都会加一个哈希值
             inject: true,
-            chunks: ['login', 'Vue'], //引入哪些模块,与entry配对.默认是全加载
+            chunks: ['login'], //引入哪些模块,与entry配对.默认是全加载
+            minify: {
+                removeComments: true, //移除HTML中的注释
+                collapseWhitespace: true, //移除空白字符
+                minifyJS: true, 
+                removeScriptTypeAttributes: true,
+                removeStyleLinkTypeAttributes: true
+            }
+        }),
+        new HtmlWebpackPlugin({
+            template: 'index.html',
+            filename: 'index.html',  //目录随output
+            hash: true, //哈希模式, 引入的JS CSS都会加一个哈希值
+            inject: true,
+            chunks: ['index'], //引入哪些模块,与entry配对.默认是全加载
             minify: {
                 removeComments: true, //移除HTML中的注释
                 collapseWhitespace: true, //移除空白字符
