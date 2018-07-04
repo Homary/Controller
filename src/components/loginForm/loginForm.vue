@@ -1,61 +1,77 @@
 <template>
 <div class="content">
-    <p><i class="admin-logo"></i></p>
-    <p>
-        <span>管理员</span><span>admin</span>
+    <p class="admin-box">
+        <i class="admin-logo"></i><span class="admin-indent">&nbsp;管理员</span><span>admin</span>
     </p>
     <input type="password" class="lf-password" v-model = "u_pass" required="required" />
     <div><button class="lf-button" @click = "handleLogin">登陆</button></div>
-    <p class="lf-bottom">
+<!--     <p class="lf-bottom">
         <input type="checkbox" class="lf-radio" id="radio" v-model = "rememberMe" />
         <label for="radio">记住密码</label>
-    </p>
+    </p> -->
 </div>
 </template>
 
 <script type="text/ecmascript-6">
+import {SUC_CODE, ERR_LOGIN_ERR, ERR_USER_PASS} from '@common/js/stateCode.js';
+import {getLogin} from '@api/login.js';
+
 export default{
     name: 'loginForm',
+
     data: function() {
         return {
             u_pass: '',
-            rememberMe: false
+            //rememberMe: false,
         }
     },
-    mounted: function() {
-        this.getStorage();
-
+    mounted: function() {        
     },
     methods: {
         handleLogin: function(event) {
             event.preventDefault();
             event.stopPropagation();
 
-            this.checkCheckbox();
+            //this.checkCheckbox();
+            this._getLogin();
         },
-        checkCheckbox: function() {
-            let check     = this.rememberMe,
-                _password = this.u_pass,
-                storage   = window.localStorage; 
+        _getLogin: function() {
+            let _pass = this.u_pass;
 
-            if (check) {
-                let _storage = storage.getItem('_password');
-                storage.setItem('_password', _password);
-            }else {
-                storage.removeItem('_password');
-            }
-        },
-        getStorage: function() {
-            let storage = window.localStorage,
-                _check = storage.getItem('_password');
+            getLogin(_pass).then((data)=>{
 
-            if (_check) {
-                this.rememberMe = true;
-                this.u_pass = _check;     
-            } else {
-                this.rememberMe = false;
-            }
+                if(data.errorcode === SUC_CODE){
+                    window.location.href = 'index.html';
+                }else if(data.errorcode === ERR_LOGIN_ERR){
+                    alert(data.msg);
+                }else if(data.errorcode === ERR_USER_PASS){
+                    alert(data.msg);
+                }
+            })
         }
+        // checkCheckbox: function() {
+        //     let check     = this.rememberMe,
+        //         _password = this.u_pass,
+        //         storage   = window.localStorage; 
+
+        //     if (check) {
+        //         let _storage = storage.getItem('_password');
+        //         storage.setItem('_password', _password);
+        //     }else {
+        //         storage.removeItem('_password');
+        //     }
+        // },
+        // getStorage: function() {
+        //     let storage = window.localStorage,
+        //         _check = storage.getItem('_password');
+
+        //     if (_check) {
+        //         this.rememberMe = true;
+        //         this.u_pass = _check;     
+        //     } else {
+        //         this.rememberMe = false;
+        //     }
+        // },
     }
 }
 </script>
@@ -67,53 +83,59 @@ export default{
     width: 2rem;
     font-size: .12rem;
     color: #fff;
-    .admin-logo{
-        display: inline-block;
-        width: .32rem;
-        height: .32rem;
-        background-image: url('adminLogo.png');
-        background-repeat: no-repeat;
+    .admin-box{
+        width: 1.56rem;
+        padding-bottom: 5px;
+        text-indent: .1rem;
+        word-spacing: 5px;
+        border-bottom: 1px solid #DDD;
+        .admin-logo{
+            display: inline-block;
+            width: .32rem;
+            height: .32rem;
+            vertical-align: middle;
+            background-image: url('adminLogo.png');
+            background-size: 80% 80%;
+            background-repeat: no-repeat;
+        }
     }
     .lf-password{
         display: block;
         width: 1.56rem;
         height: .34rem;
-        margin-top: .25rem;
-        text-indent: .36rem;
-        background-color: #CCC;
+        margin-top: .15rem;
+        color: #FFF;
+        text-indent: .46rem;
+        background-color: transparent;
         background-image: url('lock.png');
         background-size: .32rem .32rem;
         background-position: .02rem .01rem;
         background-repeat: no-repeat;
         box-sizing: border-box;
         border: 0;
-        border-radius: .34rem;
+        border-bottom: 1px solid #DDD;        
 
         /*选中状态下样式*/
         &:focus{
             display: block;
             width: 1.56rem;
             height: .34rem;
-            border-radius: .34rem;
             outline: none !important;
         }
     }
     .lf-button{
         display: inline-block;
         width: 1.56rem;
-        height: .34rem;
-        margin-top: .2rem;
-        color: #FFF;
+        height: .3rem;
+        margin-top: .3rem;
+        color: #EEE;
         background-color: rgb(143, 154, 176);
         border: 0;
-        border-radius: .34rem;
+        border-radius: .04rem;
 
         /*选中状态下样式*/
         &:focus{
             display: block;
-            width: 1.56rem;
-            height: .34rem;
-            border-radius: .34rem;
             outline: none !important;
         }
         &:hover{
@@ -139,7 +161,7 @@ export default{
         border-radius: 3px;
         background: silver;
         text-indent: .03rem;
-        line-height: 1;
+        line-height: 1.2;
         }
         input[type="checkbox"]:checked + label::before {
         content: '\2713';

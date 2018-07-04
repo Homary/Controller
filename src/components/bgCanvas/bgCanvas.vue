@@ -1,7 +1,5 @@
 <template>
-<div class="bg-box">
-    
-</div>
+<div class="bg-box"></div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -10,127 +8,116 @@ export default{
     name: '',
     data: function() {
         return {
-            camera: null,
-            mouseX: 85,
-            mouseY: -602, // 起始波动位置
-            scene: null,
-            AMOUNTX: 100,
-            AMOUNTY: 70,
-            particle: null,
-            particles: null,
+            AMOUNTX : 50,
+            AMOUNTY : 50,
+            particles: null, 
+            particle: 0,
             count: 0,
-            windowHalfX : 0,
-            windowHalfY : 0,
-            container: null,
-            SEPARATION: 100
+            camera: null,
+            scene: null,
+            renderer: null,
+            mouseX : 180,
+            mouseY : -360,
+            windowHalfX : window.innerWidth / 2,
+            windowHalfY : window.innerHeight / 2
         }
     },
     mounted: function() {        
         this.init();
-        this.animate();
+        setInterval(this.loop, 1000 / 60);
     },
     methods: {
         init() {
-            this.container = document.createElement('div');
-            this.container.style.position = "absolute";
-            this.container.style.bottom = "20px";
-            this.container.style.left = "-20px";
+            var container;
 
-            document.body.appendChild(this.container);
+            container = document.createElement( 'div' );
+            container.style.position = "absolute";
+            container.style.left = "-20px";
+            container.style.bottom = "30px";
+            container.style.zIndex = 99;
+            document.body.appendChild( container );
 
-            this.windowHalfX = window.innerWidth / 2;
-            this.windowHalfY = window.innerHeight / 2;
-            this.camera = new THREE.PerspectiveCamera(120, window.innerWidth / window.innerHeight, 1, 10000);
+            let SCREEN_WIDTH = window.innerWidth,
+                SCREEN_HEIGHT = window.innerHeight,
+                SEPARATION = 100;
 
-            // z不能太大
-            this.camera.position.z = 1000;
+            this.camera = new THREE.Camera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
+            this.camera.position.z = 999;
 
             this.scene = new THREE.Scene();
+
+            this.renderer = new THREE.CanvasRenderer();
+            this.renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT/5*3);
+
             this.particles = new Array();
 
-            var PI2 = Math.PI * 2;
-
-            var material = new THREE.ParticleCanvasMaterial({
-                //color: 0x097BDB,
-                color: 0xffffff,
-                program: function(context) {
-                    context.beginPath();
-                    context.arc(0, 0, .6, 0, PI2, true);
-                    context.fill();
-                }
-
-            });
             var i = 0;
 
-            for (var ix = 0; ix < this.AMOUNTX; ix++) {
-                for (var iy = 0; iy < this.AMOUNTY; iy++) {
-                    this.particle = this.particles[i++] = new THREE.Particle(material);
-                    this.particle.position.x = ix * this.SEPARATION - ((this.AMOUNTX * this.SEPARATION) / 2);
-                    this.particle.position.z = iy * this.SEPARATION - ((this.AMOUNTY * this.SEPARATION) / 2);
-                    this.scene.add(this.particle);
+            // 修改波浪颜色
+            var material = new THREE.ParticleCircleMaterial( 0x00ff00, 1 );
+
+            for ( var ix = 0; ix < this.AMOUNTX; ix ++ ) {
+
+                for ( var iy = 0; iy < this.AMOUNTY; iy ++ ) {
+                    
+                    this.particle = this.particles[ i ++ ] = new THREE.Particle( material );
+                    this.particle.position.x = ix * SEPARATION - ( ( this.AMOUNTX * SEPARATION ) / 2 );
+                    this.particle.position.z = iy * SEPARATION - ( ( this.AMOUNTY * SEPARATION ) / 2 );
+                    this.scene.add( this.particle );
                 }
             }
 
-            this.renderer = new THREE.CanvasRenderer();
-            this.renderer.setSize(window.innerWidth, window.innerHeight / 2);
-            this.container.appendChild(this.renderer.domElement);
+            this.count = 0;
+            container.appendChild( this.renderer.domElement );
 
-            document.addEventListener('mousemove', this.onDocumentMouseMove, false);
-            document.addEventListener('touchstart', this.onDocumentTouchStart, false);
-            document.addEventListener('touchmove', this.onDocumentTouchMove, false);
-            window.addEventListener('resize', this.onWindowResize, false);
-        },
-        onWindowResize() {
-            this.windowHalfX = window.innerWidth / 2;
-            this.windowHalfY = window.innerHeight / 2;
-            this.camera.aspect = window.innerWidth / window.innerHeight;
-            this.camera.updateProjectionMatrix();
-            this.renderer.setSize(window.innerWidth, window.innerHeight / 2);
+            document.addEventListener( 'mousemove', this.onDocumentMouseMove, false );
+            document.addEventListener( 'touchstart', this.onDocumentTouchStart, false );
+            document.addEventListener( 'touchmove', this.onDocumentTouchMove, false );
         },
         //
-        onDocumentMouseMove(event) {
+        onDocumentMouseMove( event ) {
             this.mouseX = event.clientX - this.windowHalfX;
             //this.mouseY = event.clientY - this.windowHalfY;
         },
-        onDocumentTouchStart(event) {
-            if (event.touches.length === 1) {
+        onDocumentTouchStart( event ) {
+
+            if ( event.touches.length == 1 ) {
                 event.preventDefault();
-                this.mouseX = event.touches[0].pageX - this.windowHalfX;
-                //this.mouseY = event.touches[0].pageY - this.windowHalfY;
+
+                this.mouseX = event.touches[ 0 ].pageX - this.windowHalfX;
+                //this.mouseY = event.touches[ 0 ].pageY - this.windowHalfY;
             }
         },
-        onDocumentTouchMove(event) {
-            if (event.touches.length === 1) {
+
+        onDocumentTouchMove( event ) {
+
+            if ( event.touches.length == 1 ) {
+
                 event.preventDefault();
-                this.mouseX = event.touches[0].pageX - this.windowHalfX;
-                //this.mouseY = event.touches[0].pageY - this.windowHalfY;
+
+                this.mouseX = event.touches[ 0 ].pageX - this.windowHalfX;
+                //this.mouseY = event.touches[ 0 ].pageY - this.windowHalfY;
+
             }
         },
+
         //
-        animate() {
-            requestAnimationFrame(this.animate);
-            this.render();
-        },
-        render() {
-            this.camera.position.x += (this.mouseX - this.camera.position.x) * .05;
-            this.camera.position.y += (-this.mouseY - this.camera.position.y) * .05;
-            this.camera.lookAt(this.scene.position);
+        loop() {
+            this.camera.position.x += ( this.mouseX - this.camera.position.x ) * .05;
+            this.camera.position.y += ( - this.mouseY - this.camera.position.y ) * .05;
 
             var i = 0;
 
-            for (var ix = 0; ix < this.AMOUNTX; ix++) {
-
-                for (var iy = 0; iy < this.AMOUNTY; iy++) {
-
-                    this.particle = this.particles[i++];
-                    this.particle.position.y = (Math.sin((ix + this.count) * 0.3) * 200) + (Math.sin((iy + this.count) * 0.5) * 50);
-                    this.particle.scale.x = this.particle.scale.y = (Math.sin((ix + this.count) * 0.3) + 1) * 2 + (Math.sin((iy + this.count) * 0.5) + 1) * 2;
+            for ( var ix = 0; ix < this.AMOUNTX; ix ++ ) {
+                for ( var iy = 0; iy < this.AMOUNTY; iy ++ ) {
+                    this.particle = this.particles[ i++ ];
+                    this.particle.position.y = ( Math.sin( ( ix + this.count ) * 0.3 ) * 50 ) + ( Math.sin( ( iy + this.count ) * 0.5 ) * 50 );
+                    this.particle.scale.x = this.particle.scale.y = ( Math.sin( ( ix + this.count ) * 0.3 ) + 1 ) * 2 + ( Math.sin( ( iy + this.count ) * 0.5 ) + 1 ) * 2;
                 }
-
             }
-
-            this.renderer.render(this.scene, this.camera);
-            this.count += .5;
+            this.renderer.render( this.scene, this.camera );
+            //this.stats.update();
+            this.count += 0.1;
         }
     }
 }

@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const Autoprefixer = require('autoprefixer');
 const extractLess = new ExtractTextPlugin('./common/css/[name].css');  //跟随output.path
+const proxy = require('./webpack.proxy.js');
 
 const config = {
     entry: {
@@ -12,13 +13,15 @@ const config = {
     },
     output: {
         path: path.join(__dirname, '/build/'),
-        filename: 'js/[name].js'
+        filename: 'js/[name].js',
     },
     devtool: 'eval-source-map',
     devServer: {
-        contentBase: './build',
-        port: 8080,
-        inline: true
+        contentBase: '/build',
+        port: 8888,
+        inline: true,
+        index: 'login.html',
+        proxy: proxy
     },
     module: {
         rules: [
@@ -53,8 +56,8 @@ const config = {
                     loader: 'file-loader',
                     options: {
                         name: '[name].[ext]',
-                        outputPath: './common/img',  //图片输出目录
-                        publicPath: '/common/img'   //发布的路径
+                        outputPath: 'common/img',  //图片输出目录
+                        publicPath: 'common/img'   //发布的路径
                     }
                 }]
             }

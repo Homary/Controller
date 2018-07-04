@@ -1,13 +1,12 @@
-import axios from 'axios';
-
 const url = {
-    USER_LOGIN: '/user/login'
+    USER_LOGIN: '/login'
 }
 
-export function loginApi(password) {
+export function getLogin(password) {
+
     return axios.post(url.USER_LOGIN, {
-        username: 'admin',
-        password: password
+        "username": "admin",
+        "password": password
     }).then((response) => {
         return Promise.resolve(response.data);
     })

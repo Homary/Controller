@@ -1,21 +1,24 @@
 <template>
 <div class="lf-content">
-    <loginForm></loginForm>
+    <h3>GOCC 智慧城市操控中心</h3>
+    <loginForm class="login-form"></loginForm>
+    <copyFooter></copyFooter>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
 import loginForm from '@components/loginForm/loginForm.vue';
+import copyFooter from '@components/footer/footer.vue';
 
 export default{
     name: '',
     data: function() {
         return {
-            
         }
     },
     components: {
-        loginForm
+        loginForm,
+        copyFooter
     }
 }
 </script>
@@ -27,12 +30,24 @@ export default{
     bottom: 0;
     right: 0;
     margin: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100%;
-    background-image: url('bgImage.jpg');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
+    background-color: deepskyblue;
+    // background-image: url('bgImage.jpg');
+    // background-size: 100% 100%;
+    // background-repeat: no-repeat;
+    h3{
+        position: absolute;
+        top: 30%;
+        left: 10%;
+        font-size: .25rem;   
+        color: #EEE;
+        word-spacing: px;
+    }
+    .login-form{
+        position: absolute;
+        top: 40%;
+        left: 10%;
+        margin-left: -.3rem;
+    }
 }
 </style>
