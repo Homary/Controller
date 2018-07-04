@@ -1,7 +1,6 @@
 <template>
 <div>
     <bgCanvas></bgCanvas>
-    <loginForm class="login"></loginForm>
 </div>
 </template>
 

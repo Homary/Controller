@@ -4,10 +4,10 @@
     <p>
         <span>管理员</span><span>admin</span>
     </p>
-    <input type="password" class="lf-password" />
-    <div><button class="lf-button">登陆</button></div>
+    <input type="password" class="lf-password" v-model = "u_pass" required="required" />
+    <div><button class="lf-button" @click = "handleLogin">登陆</button></div>
     <p class="lf-bottom">
-        <input type="checkbox" class="lf-radio" id="radio" />
+        <input type="checkbox" class="lf-radio" id="radio" v-model = "rememberMe" />
         <label for="radio">记住密码</label>
     </p>
 </div>
@@ -15,7 +15,48 @@
 
 <script type="text/ecmascript-6">
 export default{
-    name: 'loginForm'
+    name: 'loginForm',
+    data: function() {
+        return {
+            u_pass: '',
+            rememberMe: false
+        }
+    },
+    mounted: function() {
+        this.getStorage();
+
+    },
+    methods: {
+        handleLogin: function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            this.checkCheckbox();
+        },
+        checkCheckbox: function() {
+            let check     = this.rememberMe,
+                _password = this.u_pass,
+                storage   = window.localStorage; 
+
+            if (check) {
+                let _storage = storage.getItem('_password');
+                storage.setItem('_password', _password);
+            }else {
+                storage.removeItem('_password');
+            }
+        },
+        getStorage: function() {
+            let storage = window.localStorage,
+                _check = storage.getItem('_password');
+
+            if (_check) {
+                this.rememberMe = true;
+                this.u_pass = _check;     
+            } else {
+                this.rememberMe = false;
+            }
+        }
+    }
 }
 </script>
 <style rel="stylesheet/less" lang="less" scoped>
@@ -74,6 +115,10 @@ export default{
             height: .34rem;
             border-radius: .34rem;
             outline: none !important;
+        }
+        &:hover{
+            color: #000;
+            background-color: #CCC;
         }
     }
     .lf-bottom{

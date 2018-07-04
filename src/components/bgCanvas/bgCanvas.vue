@@ -12,7 +12,7 @@ export default{
         return {
             camera: null,
             mouseX: 85,
-            mouseY: -342, // 起始波动位置
+            mouseY: -602, // 起始波动位置
             scene: null,
             AMOUNTX: 100,
             AMOUNTY: 70,
@@ -51,7 +51,8 @@ export default{
             var PI2 = Math.PI * 2;
 
             var material = new THREE.ParticleCanvasMaterial({
-                color: 0xe1e1e1,
+                //color: 0x097BDB,
+                color: 0xffffff,
                 program: function(context) {
                     context.beginPath();
                     context.arc(0, 0, .6, 0, PI2, true);
@@ -89,20 +90,20 @@ export default{
         //
         onDocumentMouseMove(event) {
             this.mouseX = event.clientX - this.windowHalfX;
-            this.mouseY = event.clientY - this.windowHalfY;
+            //this.mouseY = event.clientY - this.windowHalfY;
         },
         onDocumentTouchStart(event) {
             if (event.touches.length === 1) {
                 event.preventDefault();
                 this.mouseX = event.touches[0].pageX - this.windowHalfX;
-                this.mouseY = event.touches[0].pageY - this.windowHalfY;
+                //this.mouseY = event.touches[0].pageY - this.windowHalfY;
             }
         },
         onDocumentTouchMove(event) {
             if (event.touches.length === 1) {
                 event.preventDefault();
                 this.mouseX = event.touches[0].pageX - this.windowHalfX;
-                this.mouseY = event.touches[0].pageY - this.windowHalfY;
+                //this.mouseY = event.touches[0].pageY - this.windowHalfY;
             }
         },
         //
@@ -122,14 +123,14 @@ export default{
                 for (var iy = 0; iy < this.AMOUNTY; iy++) {
 
                     this.particle = this.particles[i++];
-                    this.particle.position.y = (Math.sin((ix + this.count) * 0.3) * 50) + (Math.sin((iy + this.count) * 0.5) * 50);
+                    this.particle.position.y = (Math.sin((ix + this.count) * 0.3) * 200) + (Math.sin((iy + this.count) * 0.5) * 50);
                     this.particle.scale.x = this.particle.scale.y = (Math.sin((ix + this.count) * 0.3) + 1) * 2 + (Math.sin((iy + this.count) * 0.5) + 1) * 2;
                 }
 
             }
 
             this.renderer.render(this.scene, this.camera);
-            this.count += 0.1;
+            this.count += .5;
         }
     }
 }
