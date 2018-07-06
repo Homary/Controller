@@ -1,13 +1,19 @@
-const url = {
-    USER_LOGIN: '/login'
-}
+const USER_LOGIN = '/user/login'; // 登录接口
+const QUIT_LOGIN = '/user/loginOut'; //退出登录
 
 export function getLogin(password) {
 
-    return axios.post(url.USER_LOGIN, {
+    return axios.post(USER_LOGIN, {
         "username": "admin",
         "password": password
     }).then((response) => {
         return Promise.resolve(response.data);
     })
+}
+
+export function quitLogin() {
+    return axios.get(QUIT_LOGIN)
+            .then((res)=>{
+                return Promise.resolve(res.data);
+            })
 }

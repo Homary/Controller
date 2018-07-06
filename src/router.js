@@ -1,10 +1,32 @@
-import test from '@components/userInfo/userInfo.vue';
+import index from '@src/pages/index/index.vue';
+
+const subList = () => import('@components/subList/subList.vue');
+const indexContent = () => import('@components/indexContent/indexContent.vue');
+const thirdList = () => import('@components/thirdList/thirdList.vue');
 
 export default new VueRouter({
     routes: [
         {
-            path: '/test',
-            component: test
+            path: '/',
+            component: index,
+            children: [
+                {
+                    path: '/',
+                    component: indexContent
+                },
+                {
+                    path: 'subList/:id',
+                    component: subList,
+                    props: true,
+                    name: 'subList'
+                },
+                {
+                    path: 'subList/:id/:i_id',
+                    component: thirdList,
+                    props: true,
+                    name: 'thirdList'
+                }
+            ]
         }
     ]
 })

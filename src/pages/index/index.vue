@@ -1,42 +1,42 @@
 <template>
-<div>
-    <bgCanvas></bgCanvas>
-    <indexNav class="index-nav"></indexNav>
+<div class="index">
+    <userInfo class="user-header"></userInfo>
     <router-view class="router-view"></router-view>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
-import bgCanvas from '@components/bgCanvas/bgCanvas.vue';
-import indexNav from '@components/indexNav/indexNav.vue';
+import userInfo from '@components/userInfo/userInfo.vue';
 
 export default{
     name: 'index',
-    data: function() {
-        return {
-            
-        }
-    },
+
     components: {
-        bgCanvas,
-        indexNav
+        userInfo
     }
 }
 </script>
+
 <style rel="stylesheet/less" lang="less" scoped>
+
 html, body{
     width: 100%;
     height: 100%;
+}
+.index{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    //background-image: url('主页底图.jpg');
+    background-image: -webkit-linear-gradient(0 0, 100% 100%, color-stop(0, #13194C), color-stop(100%, #134C9E));
+    background-image: linear-gradient(135deg, #13194C, #134C9E);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
     overflow: hidden;
+    .user-header{
+        position: absolute;
+        z-index: 9999;
+    }
 }
-.index-nav{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -90%);
-    z-index: 999;
-}
-.router-view{
-    position: absolute;
-}
+
 </style>

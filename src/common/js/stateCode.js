@@ -1,4 +1,5 @@
-/*状态码*/
+
+    /*状态码*/
     export const SUC_CODE = "1000";             // 成功
     export const ERR_GET_USER_INFO = "1002";    // 读取用户消息失败
     export const ERR_GET_SYSTEM_INFO = "1100";  // 获取系统列表信息失败

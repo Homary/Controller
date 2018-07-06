@@ -1,24 +1,28 @@
+<!-- 首页导航栏 -->
 <template>
 <div class="in-wraper">
     <i class="left-btn nav-btn" @click = "handleLeft"></i>
     <div class="in-screen">
-        <div class="item-box item-box1" ref = "navItem1">
-            <span class="nav-item nav-item-one">法人库</span>
-            <span class="nav-item nav-item-two">制作门户</span>
-            <span class="nav-item nav-item-three">目录管理</span>
-            <span class="nav-item nav-item-four">人口库</span>
-        </div>
-        <div class="item-box item-box2" ref = "navItem2">
-            <span class="nav-item">5</span>
-            <span class="nav-item">6</span>
-            <span class="nav-item">7</span>
-            <span class="nav-item">8</span>
-        </div>
-        <div class="item-box item-box3" ref = "navItem3">
-            <span class="nav-item">9</span>
-            <span class="nav-item">10</span>
-            <span class="nav-item">11</span>
-            <span class="nav-item">12</span>
+<!--         <div class="item-box">
+            <span class="nav-item nav-item-one">
+                <router-link to="/">法人库</router-link>
+            </span>
+            <span class="nav-item nav-item-two">
+                <router-link to="/">制作门户</router-link>
+            </span>
+            <span class="nav-item nav-item-three">
+                <router-link to="/">目录管理</router-link>
+            </span>
+            <span class="nav-item nav-item-four" >
+                <router-link to="/">人口库</router-link>
+            </span>
+        </div> -->
+        <div class="item-box" v-for="item in sysList">
+            <router-link :to="'/subList/' + sub_item.id" class="nav-item" 
+                v-for="sub_item in item"  :key="sub_item.id"
+                :style="{'background-image': 'url('+ sub_item.iconUrl +')'}">
+                {{sub_item.name}}
+            </router-link>
         </div>
     </div>
     <i class="right-btn nav-btn" @click = "handleRight"></i>
@@ -26,15 +30,20 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { getSysList } from '@api/index.js';
+import { SUC_CODE, ERR_GET_SYSTEM_INFO} from '@common/js/stateCode.js';
+import * as types from '@src/store/mutation-types.js';
+
 export default{
     name: '',
     data: function() {
         return {
-            count: 1        
+            count: 0,
+            sysList: null    
         }
     },
-    mounted: function() {
-
+    beforeMount: function() {
+        this._getSysList();
     },
     methods: {
         handleRight: function() {
@@ -45,19 +54,43 @@ export default{
             this.count--;
             this.moveItem();
         },
-        moveItem: function(p) {
-            let items = this.$refs;
+        moveItem: function() {
+            let items = document.getElementsByClassName('item-box'),
+                refLength = this.sysList.length;
 
-            if (this.count === 3) { // 最右
+            if (this.count === refLength) { // 最右
                 this.count = 0;
             }
             if (this.count === -1) { // 最左
-                this.count = 2;
+                this.count = refLength - 1;
             }
-console.log(this.count)
-            for(let key in items){
-                items[key].style.left = -8*this.count + 'rem';
+            for(let i=0, len=items.length; i<len; i++){
+                items[i].style.left = -7*this.count + 'rem';
             }
+        },
+        _getSysList(){
+            getSysList().then((res) => {
+                let _arr = Array.from(res.data);
+
+                this._saveSysList(_arr);
+
+                if(res.errorcode === SUC_CODE){
+                    let data = res.data,
+                        len = Math.ceil(data.length / 4),
+                        arr = [];
+
+                    while(data.length){
+                        arr.push(data.splice(0, 4))
+                    }
+                this.sysList = arr;
+
+                }else if(res.errorcode === ERR_GET_SYSTEM_INFO){
+                    alert(res.msg)
+                }
+            })
+        },
+        _saveSysList(data){
+            this.$store.commit(types.SET_SYSTEM_LIST, data);
         }
     }
 }
@@ -66,45 +99,58 @@ console.log(this.count)
 .in-wraper{
     display: flex;
     align-items: center;
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
     .nav-btn{
-        width: .3rem;
-        height: .3rem;
+        width: .5rem;
+        height: .5rem;
         background-repeat: no-repeat;
-        background-position: 50% 50%;
         &:hover{
-            transform: scale(2);
+            background-size: 50%, 50%;
         }
     }
     .left-btn{
+        background-position: 90% 50%;
         background-image: url('point_left.png');
     }
     .right-btn{
+        background-position: 10% 50%;
         background-image: url('point_right.png');
     }
     .in-screen{
         display: flex;
-        width: 8rem;
-        height: 2rem;
+        width: 7rem;
+        height: 1rem;
         overflow: hidden;
         .item-box{
             position: relative;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
             flex: 1 0 100%;
-            height: 2rem;
+            height: 1rem;
             overflow: hidden;
+            transition: all .5s;
             .nav-item{
-                width: 1.5rem;
-                height: 2.2rem;
-                margin-top: -.2rem;
-                font-size: .16rem;
-                color: #EEE;
+                width: 1.75rem;
+                height: 1.3rem;
+                margin-top: -.1rem;
+                font-size: .15rem;
                 text-align: center;
-                line-height: 25;
-                //background-size: 100% 100%;
+                text-decoration: none !important;
+                line-height: 15;
+                background-size: .825rem .8rem;
                 background-repeat: no-repeat;
-                background-position: 50% 50%;
+                background-position: 50% 40%;
+            }
+            a{
+                text-decoration: none !important;
+                color: rgba(255, 255, 255, .8) !important;
+                opacity: .8;
+                &:hover{
+                    color: #BBB;
+                }
             }
             .nav-item-one{
                 background-image: url('法人库.png');

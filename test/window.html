@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+</head>
+<body>
+    <script>
+        window.onbeforeunload=function(e){     
+    　　var e = window.event||e;  
+    　　e.returnValue=("确定离开当前页面吗？");
+
+        return 'Likai '
+    }
+    window.onunload=function(e){     
+    　　var e = window.event||e;  
+    　　e.returnValue=("确定离开当前页面吗？");
+    } 
+    window.onload = function() {
+        console.log('onload');
+    } 
+    </script>
+</body>
+</html>

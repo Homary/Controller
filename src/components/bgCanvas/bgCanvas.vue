@@ -1,11 +1,15 @@
+<!-- 背景3D波浪 -->
 <template>
-<div class="bg-box"></div>
+<div class="bg-box">
+</div>
 </template>
 
 <script type="text/ecmascript-6">
+import eventBus from '@common/js/eventBus.js';
+// <script src="https://cdn.bootcss.com/three.js/25/Three.js"><//script>
 
 export default{
-    name: '',
+    name: 'waves',
     data: function() {
         return {
             AMOUNTX : 50,
@@ -19,23 +23,22 @@ export default{
             mouseX : 180,
             mouseY : -360,
             windowHalfX : window.innerWidth / 2,
-            windowHalfY : window.innerHeight / 2
+            windowHalfY : window.innerHeight / 2,
+            container: null
         }
     },
-    mounted: function() {        
+    mounted: function() {       
         this.init();
-        setInterval(this.loop, 1000 / 60);
+        this._timer = setInterval(this.loop, 1000 / 60);
     },
     methods: {
         init() {
-            var container;
-
-            container = document.createElement( 'div' );
-            container.style.position = "absolute";
-            container.style.left = "-20px";
-            container.style.bottom = "30px";
-            container.style.zIndex = 99;
-            document.body.appendChild( container );
+            this.container = document.createElement( 'div' );
+            this.container.style.position = "absolute";
+            this.container.style.left = "-20px";
+            this.container.style.bottom = "30px";
+            this.container.style.zIndex = 99;
+            document.body.appendChild( this.container );
 
             let SCREEN_WIDTH = window.innerWidth,
                 SCREEN_HEIGHT = window.innerHeight,
@@ -54,7 +57,7 @@ export default{
             var i = 0;
 
             // 修改波浪颜色
-            var material = new THREE.ParticleCircleMaterial( 0x00ff00, 1 );
+            var material = new THREE.ParticleCircleMaterial( 0xffffff, 0.85);
 
             for ( var ix = 0; ix < this.AMOUNTX; ix ++ ) {
 
@@ -68,11 +71,30 @@ export default{
             }
 
             this.count = 0;
-            container.appendChild( this.renderer.domElement );
+            this.container.appendChild( this.renderer.domElement );
 
             document.addEventListener( 'mousemove', this.onDocumentMouseMove, false );
             document.addEventListener( 'touchstart', this.onDocumentTouchStart, false );
             document.addEventListener( 'touchmove', this.onDocumentTouchMove, false );
+            window.addEventListener( 'resize', this.onWindowResize, false );
+
+            eventBus.$on('parentRouteChange', this.handleEventBus);
+        },
+        handleEventBus(boo){
+            clearInterval(this._timer);
+            
+            if(this.container){
+                this.container.parentNode.removeChild(this.container);
+                this.container = null;
+            }
+
+            return;
+        },
+        onWindowResize() {
+            let SCREEN_WIDTH = window.innerWidth,
+                SCREEN_HEIGHT = window.innerHeight;
+
+            this.renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT/5*3);
         },
         //
         onDocumentMouseMove( event ) {
@@ -88,7 +110,6 @@ export default{
                 //this.mouseY = event.touches[ 0 ].pageY - this.windowHalfY;
             }
         },
-
         onDocumentTouchMove( event ) {
 
             if ( event.touches.length == 1 ) {
@@ -100,7 +121,6 @@ export default{
 
             }
         },
-
         //
         loop() {
             this.camera.position.x += ( this.mouseX - this.camera.position.x ) * .05;
@@ -116,7 +136,6 @@ export default{
                 }
             }
             this.renderer.render( this.scene, this.camera );
-            //this.stats.update();
             this.count += 0.1;
         }
     }
@@ -131,12 +150,10 @@ export default{
     right: 0;
     margin: auto;
     height: 100%;
-    color: #FFF;
-    background-color: #193c6d; 
-    background-image: url("//img.alicdn.com/tps/TB1d.u8MXXXXXXuXFXXXXXXXXXX-1900-790.jpg");
+    //background-image: url("主页底图.jpg");
     background-size: 100%;
-    background-image: -webkit-linear-gradient(0 0, 100% 100%, color-stop(0, #003073), color-stop(100%, #029797));
-    background-image: linear-gradient(135deg, #003073, #029797);
+    background-image: -webkit-linear-gradient(0 0, 100% 100%, color-stop(0, #13194C), color-stop(100%, #134C9E));
+    background-image: linear-gradient(135deg, #13194C, #134C9E);
     text-align: center;
     margin: 0px;
     overflow: hidden;

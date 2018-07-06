@@ -4,7 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const Autoprefixer = require('autoprefixer');
 const extractLess = new ExtractTextPlugin('./common/css/[name].css');  //跟随output.path
-const proxy = require('./webpack.proxy.js');
+
+const SERVER = require('./webpack.server.js');
 
 const config = {
     entry: {
@@ -16,13 +17,7 @@ const config = {
         filename: 'js/[name].js',
     },
     devtool: 'eval-source-map',
-    devServer: {
-        contentBase: '/build',
-        port: 8888,
-        inline: true,
-        index: 'login.html',
-        proxy: proxy
-    },
+    devServer: SERVER,
     module: {
         rules: [
             {
@@ -30,7 +25,12 @@ const config = {
                 exclude: path.resolve(__dirname, 'node_modules'),
                 loader: 'babel-loader',
                 query: {
-                    presets: ["es2015"]
+                  presets: [
+                    ["latest", {
+                      "es2016": { "modules": false }
+                    }],
+                    "stage-2"
+                  ]
                 }
             },
             {
@@ -102,6 +102,11 @@ const config = {
             '@src': path.join(__dirname, 'src'),
             '@api': path.join(__dirname, 'src/api')
         }
+    },
+    externals: {
+        'vue': 'Vue',
+        'vue-router': 'VueRouter',
+        'vuex': 'Vuex'
     },
     watch: true
 }

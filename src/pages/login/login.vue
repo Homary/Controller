@@ -31,14 +31,13 @@ export default{
     right: 0;
     margin: auto;
     height: 100%;
-    background-color: deepskyblue;
-    // background-image: url('bgImage.jpg');
-    // background-size: 100% 100%;
-    // background-repeat: no-repeat;
+    background-image: url('bgImage.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
     h3{
         position: absolute;
         top: 30%;
-        left: 10%;
+        right: 10%;
         font-size: .25rem;   
         color: #EEE;
         word-spacing: px;
@@ -46,7 +45,7 @@ export default{
     .login-form{
         position: absolute;
         top: 40%;
-        left: 10%;
+        right: 15%;
         margin-left: -.3rem;
     }
 }
