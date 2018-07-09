@@ -1,8 +1,24 @@
-const GET_SYS_LIST = '/system/getSysList'; // 获取系统列表
+const URL_SYS_LIST = '/system/getSysList'; // 获取系统列表
+const URL_SCREEN_LIST = '/screen/getScreenList'; // 获取分屏列表
+const URL_PLAN_LIST = '/plan/getPlanInfo'; //获取预案列表
 
 export function getSysList() {
-    return axios.get(GET_SYS_LIST)
-                .then((res) => {
-                    return Promise.resolve(res.data);
-                })
+    return axios.get(URL_SYS_LIST)
+            .then((res) => {
+                return Promise.resolve(res.data);
+            })
+}
+
+export function getScreenList() {
+    return axios.get(URL_SCREEN_LIST)
+            .then((res) => {
+                return Promise.resolve(res.data);
+            })
+}
+
+export function getPlanList() {
+    return axios.get(URL_PLAN_LIST)
+            .then((res) => {
+                return Promise.resolve(res.data);
+            })
 }
