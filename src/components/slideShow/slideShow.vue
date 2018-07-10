@@ -1,0 +1,205 @@
+<!-- 主页二级菜单 -->
+<template>
+<div class="in-wraper">
+    <i class="left-btn nav-btn" @click = "handleLeft"></i>
+    <div class="in-screen">
+        <div class="item-box">
+            <span class="nav-item" @click="goNextMenu(index)"  v-for="(item, index) in list_show" :style="{'background-image': 'url('+ item.iconUrl +')'}">
+                {{item.name}}
+            </span>
+        </div>
+    </div>
+    <i class="right-btn nav-btn" @click = "handleRight"></i>
+    <button @click="$router.go(-1)" class="iw-btn-back"></button>
+</div>
+</template>
+
+<script type="text/ecmascript-6">
+import * as types from '@src/store/mutation-types.js';
+
+export default{
+    name: 'slideShow',
+    data: function() {
+        return {
+            count: 0,
+            last_list: [],
+            list_show: [],
+            indexs: []
+        }
+    },
+    beforeMount(){
+        this.indexs = this.setPath(this.$router.history.current.path);
+        this.initData();
+    },
+    watch: {
+        '$route': function(newVal, old) {
+            this.indexs = this.setPath(newVal.path);
+            this.initData();
+        }
+    },
+    methods: {
+        initData(){
+
+            let _indexs = Array.from(this.indexs);
+            let _l = _indexs.shift();
+
+            if(!this.$store.state.list.length){
+                this.$store.commit(types.FLASE_NAV_LIST);
+            }
+
+            this.list_show = this.$store.state.list[_l].subSystem;
+
+            while(_indexs.length){
+                let l = _indexs.shift();
+
+                if(this.list_show[l].subSystem){
+
+                    this.list_show = this.list_show[l].subSystem;
+
+                }
+            }
+
+            if(this.list_show.length > 8){
+
+                let _list = [],
+                    i = 0;
+
+                while(this.list_show.length){
+                    _list.push(this.list_show.slice(0, 7));
+                    this.list_show.splice(0, 7);
+
+                    i++;
+                }
+            }
+        },
+        setPath(path){
+
+            let _arr = path.split('/');
+         
+            _arr.splice(0, 2);
+
+            for(let i=0, len=_arr.length; i<len; i++){
+                _arr[i] = _arr[i]*1;
+            }
+
+            return _arr;
+        },
+        goNextMenu(index){
+            let params = '';
+
+            if(this.list_show[index].subSystem){
+
+                this.indexs.push(index);
+                for(let i=0, len=this.indexs.length; i<len; i++){
+                    params += `/${this.indexs[i]}`;
+                }
+
+                this.$router.push({path: `/subList${params}`});
+            }else{
+
+console.log('最后一级菜单')
+                // 最后一级菜单
+
+            }
+        },
+        handleRight: function() {
+            this.count++;
+            this.moveItem();
+        },
+        handleLeft: function() {
+            this.count--;
+            this.moveItem();
+        },
+        moveItem: function() {
+            let items = document.getElementsByClassName('item-box'),
+                refLength = this.list_show.length;
+
+            if (this.count === refLength) { // 最右
+                this.count = 0;
+            }
+            if (this.count === -1) { // 最左
+                this.count = refLength - 1;
+            }
+            for(let i=0, len=items.length; i<len; i++){
+                items[i].style.transition = 'all .5s';
+                items[i].style.left = -7*this.count + 'rem';
+            }
+        }
+    }
+}
+</script>
+<style rel="stylesheet/less" lang="less" scoped>
+.in-wraper{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 1rem;
+    transform: translateY(60%);
+    box-sizing: border-box;
+    .nav-btn{
+        width: .5rem;
+        height: .5rem;
+        background-repeat: no-repeat;
+        &:hover{
+            background-size: 50%, 50%;
+        }
+    }
+    .left-btn{
+        background-position: 90% 50%;
+        background-image: url('point_left.png');
+    }
+    .right-btn{
+        background-position: 10% 50%;
+        background-image: url('point_right.png');
+    }
+    .in-screen{
+        display: flex;
+        width: 7rem;
+        height: 3rem;
+        overflow: hidden;
+        .item-box{
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            flex: 1 0 100%;
+            height: 3rem;
+            transition: left .5s;
+            .nav-item{
+                width: 1.75rem;
+                height: 1.3rem;
+                margin-top: -.1rem;
+                font-size: .15rem;
+                color: #EEE;
+                text-align: center;
+                text-decoration: none !important;
+                line-height: 15;
+                background-size: .825rem .8rem;
+                background-repeat: no-repeat;
+                background-position: 50% 40%;
+            }
+            a{
+                text-decoration: none !important;
+                color: rgba(255, 255, 255, .8) !important;
+                opacity: .8;
+                &:hover{
+                    color: #BBB;
+                }
+            }
+        }
+    }
+    .iw-btn-back{
+        position: absolute;
+        bottom: 10%;
+        right: 10%;
+        width: .5rem;
+        height: .5rem;
+        background-image: url('返回.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        border: 0;
+        border-radius: 50%;
+        transform: translateY(500%);
+    }
+}  
+</style>

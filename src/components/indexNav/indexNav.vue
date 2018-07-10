@@ -18,8 +18,8 @@
             </span>
         </div> -->
         <div class="item-box" v-for="item in sysList">
-            <router-link :to="'/subList/' + sub_item.id" class="nav-item" 
-                v-for="sub_item in item"  :key="sub_item.id"
+            <router-link :to="'/subList/' + index" class="nav-item" 
+                v-for="(sub_item, index) in item"  :key="sub_item.id"
                 :style="{'background-image': 'url('+ sub_item.iconUrl +')'}">
                 {{sub_item.name}}
             </router-link>

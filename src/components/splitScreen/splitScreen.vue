@@ -7,6 +7,8 @@
                 <div class="sc-top-screen">
                     <screen v-show = "!noneSelect" :screen_id="screen_id"></screen>
                     <div class="sc-screen-none" v-if = "noneSelect">无信号</div>
+                    <saveWindow :win_condition = "win_condition" v-on:win_false= "hideWindow"
+            class="sc-screen-none"></saveWindow>
                 </div>
                 <div class="sc-top-menu">
                     <span class="sc-menu-head"><i></i>预案选择</span>
@@ -35,7 +37,7 @@
                         </div>
                     </li>
                 </ul>
-                <div class="sc-button-box">
+                <div class="sc-button-box" @click = "handleSave">
                     <router-link to="#/" class="sc-button-save" v-show="!noneSelect">保存</router-link>
                 </div>
             </div>
@@ -48,18 +50,22 @@
 import {getScreenList, getPlanList} from '@api/index';
 import {SUC_CODE, ERR_GET_SCREEN_INFO, ERR_GET_PLAN_LIST} from '@common/js/stateCode';
 import screen from '@components/screen/screen.vue';
+import saveWindow from '@components/saveWindow/saveWindow.vue';
 
 export default{
     name: 'splitSreen',
     components: {
-        screen
+        screen,
+        saveWindow
     },
     data: function() {
         return {
             noneSelect: true,
             screenList: [],
             planList: [],
-            screen_id: 'noSend'
+            screen_id: 'noSend',
+            win_condition: false,
+            plan_name: ''
         }
     },
     beforeMount() {
@@ -105,12 +111,56 @@ export default{
         },
         sendScreenId(name){
             this.screen_id = name;
+        },
+        handleSave(){
+            this.showSaveWindow();
+        },
+        showSaveWindow(){
+            this.win_condition = true;
+        },
+        hideWindow(name){
+            if(name){
+                this.getPlanName(name);
+            }
+
+            this.win_condition = false;
+        },
+        getPlanName(name){
+            this.plan_name = name;
         }
     }
 }
 </script>
 
 <style rel="stylesheet/less" lang="less" scoped>
+
+@media only screen and (min-width: 1500px) {
+    .sc-top-box{
+        height: 4rem !important;
+        .sc-menu-contain{
+            height: 3.5rem !important;
+            box-sizing: border-box;
+            .sc-menu-item-box{
+                height: .3rem !important;
+                line-height: .3rem !important;
+            }
+        }
+    }
+}
+@media only screen and (min-width: 1700px) {
+    .sc-top-box{
+        height: 3.5rem !important;
+        .sc-menu-contain{
+            height: 3rem !important;
+            box-sizing: border-box;
+            .sc-menu-item-box{
+                height: .3rem !important;
+                line-height: .3rem !important;
+            }
+        }
+    }
+}
+
 .sc-container{
     margin-top: .8rem;
     color: #EEE;
@@ -149,6 +199,7 @@ export default{
             .sc-menu-contain{
                 height: 4.7rem - .2rem;
                 overflow-y: scroll;
+                box-sizing: border-box;
 
                 /*滚动条样式*/
                 &::-webkit-scrollbar {/*滚动条整体样式*/

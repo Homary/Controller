@@ -13,13 +13,13 @@ import * as types from '@src/store/mutation-types';
 
 export default{
     name: 'thirdList',
-    props: ['id', 'i_id'],
+    props: ['index', 'i_index'],
     computed: {
         list(){
             if(!this.$store.state.list.length){
                 this.$store.commit(types.FLASE_NAV_LIST);
             }
-            return this.$store.state.list[this.id - 1].subSystem[this.i_id - 1].subSystem;
+            return this.$store.state.list[this.index].subSystem[this.i_index].subSystem;
         }
     }
 }

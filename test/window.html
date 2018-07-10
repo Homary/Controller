@@ -3,22 +3,49 @@
 <head>
     <meta charset="UTF-8" />
     <title></title>
+    <style>
+        .par{
+            background-color: red;
+        }
+        .left{
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            float: left;
+        }
+        .par:after{
+            display: block;
+            content: '.';
+            clear: both;
+            width: 0;
+            height: 0;
+        }
+        .clear{
+            display: inline-block;
+            clear: both;
+        }
+    </style>
 </head>
 <body>
+    <div class="par">
+        <div class="left">
+            
+        </div>
+    </div>
+    <form action="">
+    <input type="text"  required />
+    <input type="submit" value="提交" />
+    </form>
     <script>
-        window.onbeforeunload=function(e){     
-    　　var e = window.event||e;  
-    　　e.returnValue=("确定离开当前页面吗？");
-
-        return 'Likai '
-    }
-    window.onunload=function(e){     
-    　　var e = window.event||e;  
-    　　e.returnValue=("确定离开当前页面吗？");
-    } 
     window.onload = function() {
-        console.log('onload');
-    } 
+        let btn = document.getElementById('btn');
+
+        btn.addEventListener('click', handleclick, false);
+
+        function handleclick() {
+            window.dispatch('submit');
+        }
+    }
     </script>
 </body>
 </html>
