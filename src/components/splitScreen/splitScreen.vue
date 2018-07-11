@@ -6,7 +6,10 @@
             <div class="sc-top-box">
                 <div class="sc-top-screen">
                     <screen v-show = "!noneSelect" :screen_id="screen_id"></screen>
-                    <div class="sc-screen-none" v-if = "noneSelect">无信号</div>
+                    <div class="sc-screen-none sc-none-box" v-if = "noneSelect">
+                        <i class="sc-none-icon"></i>
+                        <span class="sc-none-single">无信号</span>
+                    </div>
                     <saveWindow :win_condition = "win_condition" v-on:win_false= "hideWindow"
             class="sc-screen-none"></saveWindow>
                 </div>
@@ -22,13 +25,7 @@
             </div>
             <div class="sc-bottom-box">
                 <ul class="sc-bottom-menu-box">
-                    <router-link to="/" tag="li" class="sc-bottom-menu-item ">
-                        <div @click = "noneSelect = false">
-                            <i class="sc-bottom-menu-item-icon"></i>
-                            <span>首页</span>
-                        </div>
-                    </router-link>
-                    <li tag="li" class="sc-bottom-menu-item" 
+                    <li tag="li" class="sc-bottom-menu-item" :id="item.id" 
                         v-for = "item in screenList" :key = "item.id" :name = "item.name"
                         @click = "handleScreenSelect">
                         <div @click = "noneSelect = false">
@@ -37,8 +34,9 @@
                         </div>
                     </li>
                 </ul>
-                <div class="sc-button-box" @click = "handleSave">
-                    <router-link to="#/" class="sc-button-save" v-show="!noneSelect">保存</router-link>
+                <div class="sc-button-box">
+                    <span @click = "handleSave" class="sc-button-save" v-show="!noneSelect"></span>
+                    <span @click="$router.go(-1)" class="sc-button-back" ></span>
                 </div>
             </div>
         </div>
@@ -47,10 +45,11 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {getScreenList, getPlanList} from '@api/index';
-import {SUC_CODE, ERR_GET_SCREEN_INFO, ERR_GET_PLAN_LIST} from '@common/js/stateCode';
+import {getScreenList, getPlanList, savePlan} from '@api/index';
 import screen from '@components/screen/screen.vue';
 import saveWindow from '@components/saveWindow/saveWindow.vue';
+import eventBus from '@common/js/eventBus';
+import {SUC_CODE, ERR_GET_SCREEN_INFO, ERR_GET_PLAN_LIST, ERR_SAVE_PLAN_INFO} from '@common/js/stateCode';
 
 export default{
     name: 'splitSreen',
@@ -65,12 +64,24 @@ export default{
             planList: [],
             screen_id: 'noSend',
             win_condition: false,
-            plan_name: ''
+            plan_name: '',
+            splitId: null // 存放当前选择的分屏项
         }
+    },
+    mounted(){
+        eventBus.$on('_getScreenData', this.getScreenData);
     },
     beforeMount() {
         this._getScreenList();
         this._getPlanList();
+    },
+    beforeRouteEnter(to, from, next){
+        eventBus.$emit('splitRouteChange', false);
+        next();
+    },
+    beforeRouteLeave(to, from, next){
+        eventBus.$emit('splitRouteChange', true);
+        next();
     },
     methods: {
         _getScreenList(){
@@ -98,7 +109,10 @@ export default{
             event.stopPropagation();
 
             this.addSelectClass(event.currentTarget);
+
             this.sendScreenId(event.currentTarget.getAttribute('name'));
+
+            this.setSelectId(event.currentTarget.getAttribute('id'));
         },
         addSelectClass(elm){
             let _class = 'sc-screen-list-select',
@@ -108,6 +122,9 @@ export default{
                 elms[i].classList.remove(_class);
             }
             elm.classList.add(_class)
+        },
+        setSelectId(id){
+            this.splitId = id;
         },
         sendScreenId(name){
             this.screen_id = name;
@@ -127,6 +144,25 @@ export default{
         },
         getPlanName(name){
             this.plan_name = name;
+
+            // 取得当前各个分屏信息
+            eventBus.$emit('splitGet');
+            // POST 请求
+            
+        },
+        getScreenData(data){
+            let obj = {};
+                obj.name = this.plan_name;
+                obj.splitId = this.splitId;
+                obj.windows = data;
+
+            console.log(obj)
+            this._savePlan(obj);
+        },
+        _savePlan(data){
+            savePlan(data).then((data) => {
+                console.log(data)
+            })
         }
     }
 }
@@ -175,12 +211,34 @@ export default{
             justify-content: center;
             align-items: center;
             margin: .1rem;
-            background-color: rgb(10, 19, 48);
             .sc-screen-none{
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
+            }
+            .sc-none-box{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                font-size: .18rem;
+                color: #EEE;
+                background-color: rgba(9, 16, 43, .7);
+                .sc-none-icon{
+                    width: .5rem;
+                    height: .3rem;
+                    background-image: url('无信号图标.png');
+                    background-repeat: no-repeat;
+                    background-size: 100% 100%;
+                    background-position: 50% 50%;
+                    margin-bottom: 20px;
+                }
+                .sc-none-single{
+                    opacity: .8;
+                }
             }
         }
         .sc-top-menu{
@@ -253,10 +311,6 @@ export default{
             align-items: center;
             height: .8rem;
             overflow-x: hidden;
-
-            li:first-of-type{
-                background-color: green;
-            }
             .sc-bottom-menu-item{
                 width: .8rem;
                 height: .6rem;
@@ -285,11 +339,29 @@ export default{
             text-align: center;
             .sc-button-save{
                 display: inline-block;
-                width: .3rem;
-                height: .15rem;
-                padding: .03rem .2rem;
+                width: .5rem;
+                height: .5rem;
+                margin-right: .15rem;
+                background-image: url('保存.png');
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                border-radius: 50%;
+                &:hover{
+                    box-shadow: 0 0 10px #EEE;
+                }
+            }
+            .sc-button-back{
+                display: inline-block;
+                width: .5rem;
+                height: .5rem;
                 text-decoration: none;
-                background-color: deepskyblue;
+                background-image: url('返回.png');
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                border-radius: 50%;
+                &:hover{
+                    box-shadow: 0 0 10px #EEE;
+                }
             }
         }
     }

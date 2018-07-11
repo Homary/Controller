@@ -2,6 +2,8 @@
 
 export const KEY_NAV_LIST = 'navList'; // 导航栏key
 export const KEY_USER_IFNO = 'userInfo'; // 用户信息
+export const KEY_HOME_ICON = 'homeIcon'; // 主页图标状态
+export const KEY_SPLIT_ICON = 'splitIcon'; // 分屏图标
 
 export function getStorage(name) {
     return localStorage.getItem(name) ? JSON.parse(localStorage.getItem(name)) : '';

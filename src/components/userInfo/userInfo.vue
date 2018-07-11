@@ -5,27 +5,36 @@
         <span class="ui-head-en">GOCC </span><span class="ui-head-ch">智慧城市操控中心</span>
     </div>
     <div class="user-info-box">
+        <span class="ui-home" @click="$router.push({path: '/'})" v-if="noHome"></span>
         <span class="user-head-img" 
             :style="{'background-image': 'url(' + userInfo.userIconUrl + ')'}">头像</span>
         <span class="point-hover">{{userInfo.userName}}</span>
         <span class="point-hover">修改密码</span>
         <span class="point-hover" @click="handleClickQuit">退出<i class="ui-quit"></i></span>
     </div>
+    <div class="split-icon" @click="$router.push({path: '/splitScreen'})" v-if="noSplit"></div>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
-import * as types from '@src/store/mutation-types.js';
-import * as STORAGE from '@common/js/storage.js';
-import { quitLogin } from '@api/login.js';
-import { SUC_CODE, ERR_QUIT } from '@common/js/stateCode.js';
+import * as types from '@src/store/mutation-types';
+import * as STORAGE from '@common/js/storage';
+import { quitLogin } from '@api/login';
+import { SUC_CODE, ERR_QUIT } from '@common/js/stateCode';
+import eventBus from '@common/js/eventBus';
 
 export default{
-    name: '',
+    name: 'userInfo',
+    data: function() {
+        return {
+            noHome: false,
+            noSplit: true
+        }
+    },
     computed: {
         userInfo: function() {
             if( !this.$store.state.user.id ){
-                console.log('用户ID不存在');
+console.log('用户ID不存在');
             }
 
             return this.$store.state.user;
@@ -33,6 +42,14 @@ export default{
     },
     beforeMount: function() {
         this.$store.commit(types.SET_USER_INFO, STORAGE.KEY_USER_IFNO);
+
+        this.noHome = STORAGE.getStorage(STORAGE.KEY_HOME_ICON);
+        this.noSplit = STORAGE.getStorage(STORAGE.KEY_SPLIT_ICON);
+
+    },
+    mounted: function() {
+        eventBus.$on('indexRouteChange', this.showHomeIcon);
+        eventBus.$on('splitRouteChange', this.showSplitIcon);
     },
     methods: {
         handleClickQuit(event) {
@@ -51,6 +68,14 @@ export default{
                     alert(data.msg);
                 }
             })
+        },
+        showHomeIcon(boo){
+            this.noHome = boo;
+            STORAGE.setStorage(STORAGE.KEY_HOME_ICON, boo);
+        },
+        showSplitIcon(boo){
+            this.noSplit = boo;
+            STORAGE.setStorage(STORAGE.KEY_SPLIT_ICON, boo);
         }
     }
 }
@@ -63,6 +88,15 @@ export default{
     width: 100%;
     padding: 0.3rem 0 0 0.25rem;
     box-sizing: border-box;
+    .ui-home{
+        width: .3rem;
+        height: .3rem;
+        margin-right: 30px;
+        background-image: url('主页图标.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        transform: translateY(-25%);
+    }
     .ui-header{
         font-size: .16rem;
         font-family: '微软雅黑';
@@ -101,6 +135,20 @@ export default{
             display: inline-block;
             padding-right: .2rem;
             cursor: pointer;
+        }
+    }
+    .split-icon{
+        position: fixed;
+        top: 1rem;
+        right: .5rem;
+        width: .5rem;
+        height: .5rem;
+        background-image: url('分屏浮标按钮.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        border-radius: 50%;
+        &:hover{
+            box-shadow: 0 0 10px #EEE;
         }
     }
 }

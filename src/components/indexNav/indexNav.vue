@@ -3,20 +3,6 @@
 <div class="in-wraper">
     <i class="left-btn nav-btn" @click = "handleLeft"></i>
     <div class="in-screen">
-<!--         <div class="item-box">
-            <span class="nav-item nav-item-one">
-                <router-link to="/">法人库</router-link>
-            </span>
-            <span class="nav-item nav-item-two">
-                <router-link to="/">制作门户</router-link>
-            </span>
-            <span class="nav-item nav-item-three">
-                <router-link to="/">目录管理</router-link>
-            </span>
-            <span class="nav-item nav-item-four" >
-                <router-link to="/">人口库</router-link>
-            </span>
-        </div> -->
         <div class="item-box" v-for="item in sysList">
             <router-link :to="'/subList/' + index" class="nav-item" 
                 v-for="(sub_item, index) in item"  :key="sub_item.id"
@@ -64,6 +50,7 @@ export default{
             if (this.count === -1) { // 最左
                 this.count = refLength - 1;
             }
+
             for(let i=0, len=items.length; i<len; i++){
                 items[i].style.left = -7*this.count + 'rem';
             }
@@ -131,7 +118,7 @@ export default{
             flex: 1 0 100%;
             height: 1rem;
             overflow: hidden;
-            transition: all .5s;
+            //transition: all .5s;
             .nav-item{
                 width: 1.75rem;
                 height: 1.3rem;

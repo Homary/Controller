@@ -1,7 +1,9 @@
 <template>
 <div class="index">
     <userInfo class="user-header"></userInfo>
-    <router-view class="router-view"></router-view>
+    <transition name="router" mode="out-in">
+        <router-view class="router-view"></router-view>
+    </transition>
 </div>
 </template>
 
@@ -36,7 +38,11 @@ html, body{
         position: absolute;
         z-index: 9999;
     }
-    .router-view{
+    .router-enter-active, .router-leave-active {
+      transition: opacity .5s;
+    }
+    .router-enter, .router-leave-to /* .fade-leave-active below version 2.1.8 */ {
+      opacity: 0;
     }
 }
 

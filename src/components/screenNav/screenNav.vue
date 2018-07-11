@@ -2,32 +2,21 @@
 <div>
     <button @click = "handleClick(tag.SELECT)" v-show = "!func_item">选择信号</button>
     <button @click = "handleClick(tag.CLOSE)" v-show = "func_item">X</button>
-    <p v-show = "func_item">{{func_item}}</p>
+    <p v-show = "func_item" class="sn-select-func" :data-id="menu_id">{{func_item}}</p>
     <div v-show = "level">
         <ul>
             <li v-for = "(item, index) in list" 
             @click = "handleClick(tag.MENU, index)">{{item.name}}</li>
         </ul>
     </div>
-<!--     <div v-show = "level === tag.SECOND">
-        <ul>
-            <li v-for = "(item, index) in sub_list" 
-            @click = "handleClick(item.routingkey, index)">{{item.name}}</li>
-        </ul>
-    </div>
-    <div v-show = "level === tag.THIRD && !func_item">
-        <ul>
-            <li v-for = "(item, index) in third_list" @click = "func_item = item.name"
-            >{{item.name}}</li>
-        </ul>
-    </div> -->
     <button @click = "handleClick(tag.BACK)" v-show = "!func_item && level && level!==tag.FIRST">返回上一级</button>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
 import {KEY_NAV_LIST, getStorage} from '@common/js/storage';
- 
+import eventBus from '@common/js/eventBus';
+
 export default{
     name: 'screenNav',
     data: function() {
@@ -41,7 +30,8 @@ export default{
                 CLOSE: 'close',
                 BACK: 'back',
                 SELECT: 'select'
-            }
+            },
+            menu_id: ''
         }
     },
     beforeMount(){
@@ -71,25 +61,30 @@ export default{
             }
         },
         initData(){
+            this.menu_id = this._menu_id;
+            this._menu_id = '';
             this.list = getStorage(KEY_NAV_LIST);
         },
         getMenuData(index){
+
             if(this.list[index].subSystem){
 
+                this._menu_id += `${this.list[index].id}@`;
                 this.lastList.push(this.list);
                 this.list = this.list[index].subSystem;
 
             }else{
 
                 this.func_item = this.list[index].name;
+                this._menu_id += this.list[index].id;
                 this.lastList = [];
-
                 this.hideMenu();
                 this.initData();
             }
         },
         showMenu(){
             this.level = true;
+            this.$router.push({path: '/'});
         },
         hideMenu(){
             this.level = false;
@@ -97,10 +92,22 @@ export default{
         closeSingle(){
             this.level = null;
             this.func_item = null;
+            this.menu_id = null;
         },
         goBackMenu(){
             if(this.lastList.length){
                 this.list = this.lastList.pop();
+
+               let _arr =  this._menu_id.split('@');
+
+               _arr.splice(length-2, 1);
+
+               if(_arr.length === 1){
+                    this._menu_id = '';
+               }else{
+                    this._menu_id = _arr.join('@');
+               }
+
             }else{
                 this.hideMenu();
             }

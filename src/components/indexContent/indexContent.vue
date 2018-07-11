@@ -18,7 +18,12 @@ export default{
         indexNav
     },
     beforeRouteLeave(to, from, next){
+        eventBus.$emit('indexRouteChange', true);
         eventBus.$emit('parentRouteChange', true);
+        next();
+    },
+    beforeRouteEnter(to, from, next){
+        eventBus.$emit('indexRouteChange', false);
         next();
     }
 }

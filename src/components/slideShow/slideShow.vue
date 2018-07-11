@@ -4,7 +4,7 @@
     <i class="left-btn nav-btn" @click = "handleLeft"></i>
     <div class="in-screen">
         <div class="item-box">
-            <span class="nav-item" @click="goNextMenu(index)"  v-for="(item, index) in list_show" :style="{'background-image': 'url('+ item.iconUrl +')'}">
+            <span class="nav-item" @click="goNextMenu(index)"  v-for="(item, index) in list_show" >
                 {{item.name}}
             </span>
         </div>
@@ -112,7 +112,7 @@ console.log('最后一级菜单')
         },
         moveItem: function() {
             let items = document.getElementsByClassName('item-box'),
-                refLength = this.list_show.length;
+                refLength = Math.ceil(this.list_show.length / 8);
 
             if (this.count === refLength) { // 最右
                 this.count = 0;
@@ -129,12 +129,49 @@ console.log('最后一级菜单')
 }
 </script>
 <style rel="stylesheet/less" lang="less" scoped>
+
+@media only screen and (max-width: 1500px){
+    .in-wraper{
+        transform: translateY(1.15rem) !important;
+        .iw-btn-back{
+            bottom: -65% !important;
+        }
+    }
+}
+
+@media only screen and (max-width: 1600px){
+    .in-wraper{
+        transform: translateY(1.5rem) !important;
+        .iw-btn-back{
+            bottom: -30% !important;
+        }
+    }
+}
+
+@media only screen and (min-width: 1600px){
+    .in-wraper{
+        transform: translateY(1.5rem) !important;
+        .iw-btn-back{
+            bottom: -25% !important;
+        }
+    }
+}
+
+@media only screen and (min-width: 1800px){
+    .in-wraper{
+        transform: translateY(1rem) !important;
+        .iw-btn-back{
+            bottom: -30% !important;
+        }
+    }
+}
+
 .in-wraper{
     display: flex;
     align-items: center;
     width: 100%;
     padding: 0 1rem;
-    transform: translateY(60%);
+    transform: translateY(1.15rem);
     box-sizing: border-box;
     .nav-btn{
         width: .5rem;
@@ -168,30 +205,27 @@ console.log('最后一级菜单')
             .nav-item{
                 width: 1.75rem;
                 height: 1.3rem;
-                margin-top: -.1rem;
-                font-size: .15rem;
-                color: #EEE;
+                font-size: .14rem;
+                color: #DDD;
                 text-align: center;
                 text-decoration: none !important;
                 line-height: 15;
-                background-size: .825rem .8rem;
+                background-image: url('制作门户.png');
+                background-size: .7rem .7rem;
                 background-repeat: no-repeat;
                 background-position: 50% 40%;
-            }
-            a{
-                text-decoration: none !important;
-                color: rgba(255, 255, 255, .8) !important;
-                opacity: .8;
+                box-sizing: border-box;
+                cursor: pointer;
                 &:hover{
-                    color: #BBB;
+                    color: #999;
                 }
             }
         }
     }
     .iw-btn-back{
         position: absolute;
-        bottom: 10%;
-        right: 10%;
+        bottom: -70%;
+        right: 5%;
         width: .5rem;
         height: .5rem;
         background-image: url('返回.png');
@@ -199,7 +233,6 @@ console.log('最后一级菜单')
         background-repeat: no-repeat;
         border: 0;
         border-radius: 50%;
-        transform: translateY(500%);
     }
 }  
 </style>

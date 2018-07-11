@@ -3,7 +3,7 @@
     <h6>保存为预案</h6>
     <form action="">
     <div class="sw-center">
-        <label for="input">预案名称:</label>
+        <label for="input">预案名称</label>
         <input type="text" id="input" v-model = "name"/>
     </div>
     <div class="sw-btns-box">
@@ -48,28 +48,45 @@ export default{
 <style rel="stylesheet/less" lang="less" scoped>
 .sw-container{
     align-items: center;
-    width: 1.8rem;
-    height: 1rem;
-    padding-top: 30px;
+    width: 3rem;
+    height: 1.3rem;
     font-size: .1rem;
-    color: #DDD;
-    background-color: deepskyblue;
+    color: #FFF;
+    background-color: #FFF;
     h6{
-        margin: 0 0 30px 20px;
+        height: .25rem;
+        margin-bottom: .2rem;
+        line-height: .25rem;
+        text-indent: .1rem;
         font-size: 120%;
+        background-color: #C77301;
     }
     .sw-center{
         width: 80%;
         margin: 0 auto;
+        color: #333;
+        input{
+            width: 1.5rem;
+            height: .15rem;
+            margin-left: .2rem;
+            border: 1px solid #666;
+            border-radius: 5px;
+        }
     }
     .sw-btns-box{
-        width: 80%;
-        margin: 25px auto 0 auto;
+        width: 60%;
+        margin: 0 auto;
+        transform: translateY(.25rem);
         button{
-            width: 30%;
+            width: .6rem;
+            height: .2rem;
+            color: #FFF;
+            background-color: #313131;
+            border: 0;
+            border-radius: 5px;
         }
         .sw-btn-left{
-            margin-right: 30px;
+            margin-right: .25rem;
         }
     }
 }
