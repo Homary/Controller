@@ -1,4 +1,4 @@
-const USER_LOGIN = '/user/login'; // 登录接口
+const USER_LOGIN = '/user/checkLogin'; // 登录接口
 const QUIT_LOGIN = '/user/loginOut'; //退出登录
 
 export function getLogin(password) {

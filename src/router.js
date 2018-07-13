@@ -1,8 +1,6 @@
 import index from '@src/pages/index/index.vue';
 
-const subList = () => import('@components/subList/subList.vue');
 const indexContent = () => import('@components/indexContent/indexContent.vue');
-const thirdList = () => import('@components/thirdList/thirdList.vue');
 const splitScreen = () => import('@components/splitScreen/splitScreen.vue');
 const slideShow = () => import('@components/slideShow/slideShow.vue');
 

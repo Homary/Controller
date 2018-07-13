@@ -39,7 +39,7 @@ html, body{
         z-index: 9999;
     }
     .router-enter-active, .router-leave-active {
-      transition: opacity .5s;
+      transition: opacity .3s;
     }
     .router-enter, .router-leave-to /* .fade-leave-active below version 2.1.8 */ {
       opacity: 0;

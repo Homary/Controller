@@ -5,6 +5,7 @@
     <div class="in-screen">
         <div class="item-box" v-for="item in sysList">
             <router-link :to="'/subList/' + index" class="nav-item" 
+                @click.native="handleClick(sub_item)"
                 v-for="(sub_item, index) in item"  :key="sub_item.id"
                 :style="{'background-image': 'url('+ sub_item.iconUrl +')'}">
                 {{sub_item.name}}
@@ -16,9 +17,10 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { getSysList } from '@api/index.js';
-import { SUC_CODE, ERR_GET_SYSTEM_INFO} from '@common/js/stateCode.js';
-import * as types from '@src/store/mutation-types.js';
+import { getSysList } from '@api/index';
+import { SUC_CODE, ERR_GET_SYSTEM_INFO} from '@common/js/stateCode';
+import * as types from '@src/store/mutation-types';
+import { _sendInstruction } from '@common/js/instruction';
 
 export default{
     name: '',
@@ -32,15 +34,27 @@ export default{
         this._getSysList();
     },
     methods: {
-        handleRight: function() {
+        handleClick(item){
+            let event = window.event || event;
+
+            this.sendInstruction(item);
+        },
+        sendInstruction(item){
+            let ins = item.instruction,
+                key = item.routingkey;
+
+            _sendInstruction(ins, key);
+        },
+
+        handleRight() {
             this.count++;
             this.moveItem();
         },
-        handleLeft: function() {
+        handleLeft() {
             this.count--;
             this.moveItem();
         },
-        moveItem: function() {
+        moveItem() {
             let items = document.getElementsByClassName('item-box'),
                 refLength = this.sysList.length;
 
@@ -55,6 +69,7 @@ export default{
                 items[i].style.left = -7*this.count + 'rem';
             }
         },
+
         _getSysList(){
             getSysList().then((res) => {
                 let _arr = Array.from(res.data);
@@ -138,18 +153,6 @@ export default{
                 &:hover{
                     color: #BBB;
                 }
-            }
-            .nav-item-one{
-                background-image: url('法人库.png');
-            }
-            .nav-item-two{
-                background-image: url('制作门户.png');
-            }
-            .nav-item-three{
-                background-image: url('人口库2.png');
-            }
-            .nav-item-four{
-                background-image: url('目录管理.png');
             }
         }
     }

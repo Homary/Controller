@@ -10,14 +10,18 @@
                         <i class="sc-none-icon"></i>
                         <span class="sc-none-single">无信号</span>
                     </div>
-                    <saveWindow :win_condition = "win_condition" v-on:win_false= "hideWindow"
+                    <saveWindow :win_condition = "win_condition" v-on:win_hidden= "hideWindow"
             class="sc-screen-none"></saveWindow>
                 </div>
                 <div class="sc-top-menu">
                     <span class="sc-menu-head"><i></i>预案选择</span>
                     <ul class="sc-menu-contain">
-                        <li class="sc-menu-item-box" v-for = "item in planList">
-                            {{item.name}}
+                        <li class="sc-menu-item-box" v-for = "(item, index) in planList"
+                            @click="handleSelectPlan(item)" v-on:mouseenter="handleHoverPlanList(index)" v-on:mouseleave="handleLeavePlanList">
+                            {{item.name}} 
+                            <i v-show="index==hover_plan" 
+                                @click="handleDelPlanItem(item)"
+                                class="sc-del-plan-icon">X</i>
                         </li>
                     </ul>
                     <span class="sc-menu-none">暂无</span>
@@ -25,18 +29,18 @@
             </div>
             <div class="sc-bottom-box">
                 <ul class="sc-bottom-menu-box">
-                    <li tag="li" class="sc-bottom-menu-item" :id="item.id" 
+                    <li tag="li" :class="['sc-bottom-menu-item' ,{'sc-screen-list-select':  item.id == $store.state.splitId}]" :id="item.id" 
                         v-for = "item in screenList" :key = "item.id" :name = "item.name"
                         @click = "handleScreenSelect">
                         <div @click = "noneSelect = false">
-                            <i class="sc-bottom-menu-item-icon"></i>
+                            <i class="sc-bottom-menu-item-icon" :style="{'background-image': 'url('+ item.iconUrl +')'}"></i>
                             <span>{{item.name}}</span>
                         </div>
                     </li>
                 </ul>
                 <div class="sc-button-box">
                     <span @click = "handleSave" class="sc-button-save" v-show="!noneSelect"></span>
-                    <span @click="$router.go(-1)" class="sc-button-back" ></span>
+                    <span @click="clickGoBack" class="sc-button-back" ></span>
                 </div>
             </div>
         </div>
@@ -45,10 +49,11 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {getScreenList, getPlanList, savePlan} from '@api/index';
+import {getScreenList, getPlanList, savePlan, delPlan} from '@api/index';
 import screen from '@components/screen/screen.vue';
 import saveWindow from '@components/saveWindow/saveWindow.vue';
 import eventBus from '@common/js/eventBus';
+import * as types from '@src/store/mutation-types';
 import {SUC_CODE, ERR_GET_SCREEN_INFO, ERR_GET_PLAN_LIST, ERR_SAVE_PLAN_INFO} from '@common/js/stateCode';
 
 export default{
@@ -59,13 +64,24 @@ export default{
     },
     data: function() {
         return {
+            hover_plan: null,
             noneSelect: true,
             screenList: [],
             planList: [],
-            screen_id: 'noSend',
             win_condition: false,
             plan_name: '',
-            splitId: null // 存放当前选择的分屏项
+            screen_id: '',
+            splitId: null, // 存放当前选择的分屏项
+            mapTable: {
+                '全屏': 'fullScreen',
+                '二分屏': 'diy',
+                '等分屏': 'screen1x2',
+                '三分屏': 'screen1x3',
+                '四分屏': 'screen2x2',
+                '六分屏': 'screen2x3',
+                '3X3分屏': 'screen3x3',
+                '4X4分屏': 'screen4x4'  
+            }
         }
     },
     mounted(){
@@ -76,8 +92,25 @@ export default{
         this._getPlanList();
     },
     beforeRouteEnter(to, from, next){
+        let path = from.path; 
+
         eventBus.$emit('splitRouteChange', false);
-        next();
+
+        /**
+         * 判断如果不是由主页跳转过来的, 说明已经选择了系统
+         */
+        if(path.length !== 1){
+            next((vm) => {
+                if(vm.$store.state.position){
+                    vm.noneSelect = false; // 标识页面是否已经选择了分屏
+                    vm.setSelectSys();
+
+        console.log(vm.$store.state.splitId)
+                }     
+            });
+        }else{
+            next();
+        }
     },
     beforeRouteLeave(to, from, next){
         eventBus.$emit('splitRouteChange', true);
@@ -94,6 +127,7 @@ export default{
                 }
             })
         },
+
         _getPlanList(){
             getPlanList().then((data) => {
 
@@ -104,6 +138,14 @@ export default{
                 }
             })
         },
+
+        /**
+         * 设置之前选择的分屏模式
+         */
+        setSelectSys(){
+            this.screen_id = this.$store.state.screen.screenId;
+        },
+
         handleScreenSelect(event){
             event.preventDefault();
             event.stopPropagation();
@@ -113,7 +155,10 @@ export default{
             this.sendScreenId(event.currentTarget.getAttribute('name'));
 
             this.setSelectId(event.currentTarget.getAttribute('id'));
+
+            this.send
         },
+
         addSelectClass(elm){
             let _class = 'sc-screen-list-select',
                 elms = document.getElementsByClassName(_class);
@@ -123,45 +168,157 @@ export default{
             }
             elm.classList.add(_class)
         },
+
+        addSelectPlanClass(elm){
+            let _class = 'sc-screen-plan-select',
+                elms = document.getElementsByClassName(_class);
+
+            for(let i=0, len=elms.length; i<len; i++){
+                elms[i].classList.remove(_class);
+            }
+            elm.classList.add(_class);
+        },
+
         setSelectId(id){
             this.splitId = id;
+            this.$store.commit(types.SET_SPLIT_ID, id);
         },
         sendScreenId(name){
             this.screen_id = name;
         },
+
+        clickGoBack(){
+            this.$router.go(-1);
+            this.$store.commit(types.CLAER_SPLIT_ID);
+        },
+
         handleSave(){
             this.showSaveWindow();
         },
         showSaveWindow(){
-            this.win_condition = true;
+            this.win_condition = !this.win_condition;
         },
-        hideWindow(name){
-            if(name){
-                this.getPlanName(name);
+        hideWindow(plan_name){
+
+            if(plan_name){
+                this.getPlanName(plan_name);        
             }
 
-            this.win_condition = false;
+            this.showSaveWindow();
         },
-        getPlanName(name){
-            this.plan_name = name;
 
+        /**
+         * 保存预案
+         * @param  {string} name 预案名称
+         */
+        getPlanName(plan_name){
+
+            let splitId = this.$store.state.splitId,
+                screen_id = this.$store.state.screen.screenId,
+                mode = this.$store.state.cur_sys[this.mapTable[screen_id]],
+                keys = Object.keys(mode),
+                windows = [];
+
+            for(let i=0, len=keys.length; i<len; i++){
+                windows.push({wid: '', sysId: -1});
+
+                if(mode[keys[i]].id >= 0){
+
+                    windows[i].sysId = mode[keys[i]].id;
+                }else{
+                    windows[i].sysId = -1;
+                }
+                
+                windows[i].wid = keys[i];
+            }
+console.log('y')
             // 取得当前各个分屏信息
-            eventBus.$emit('splitGet');
             // POST 请求
-            
-        },
-        getScreenData(data){
-            let obj = {};
-                obj.name = this.plan_name;
-                obj.splitId = this.splitId;
-                obj.windows = data;
+            this._savePlan({
+                name: plan_name,
+                splitId,
+                windows 
+            })
 
-            console.log(obj)
-            this._savePlan(obj);
         },
         _savePlan(data){
-            savePlan(data).then((data) => {
-                console.log(data)
+            savePlan(data).then(res => {
+                if(res.errorcode === SUC_CODE){
+                    alert('保存成功');
+                    this._getPlanList();
+                }else{
+                    alert(res.msg);
+                }
+            })
+        },
+
+        handleSelectPlan(item){
+            let event = window.event || event;
+
+            this.addSelectPlanClass(event.target);
+            this.selectPlan(item);
+        },
+        selectPlan(item){
+
+            // 如果不存在list, 就从缓存中取
+            if(!this.$store.state.list.length){
+                this.$store.commit(types.FLASE_NAV_LIST);
+            }
+
+            let _name,
+                name,
+                windows = item.windows;
+
+            for(let i=0, len=this.screenList.length; i<len; i++){
+                if(this.screenList[i].id == item.splitId){
+                    _name = this.screenList[i].name;
+                }
+            }
+            name = this.mapTable[_name];
+
+            this.$store.commit(types.SET_SPLIT_ID, item.splitId);
+            this.$store.commit(types.SET_PLAN_DATA, {name, windows});
+
+            for(let i=0, len=this.screenList.length; i<len; i++){
+
+                if(this.screenList[i].id == item.splitId){
+                    this.screen_id = this.screenList[i].name;
+
+                    this.$store.commit(types.SET_SCREEN_ID, this.screen_id);
+                    
+                    this.noneSelect = false; // 去掉无信号蒙版
+                }
+            }
+        },
+
+        handleHoverPlanList(index){
+            let event = window.event || event;
+
+            this.hoverPlanList(index);
+        },
+        hoverPlanList(index){
+            this.hover_plan = index;
+        },
+        handleLeavePlanList(){
+            this.hover_plan = null;
+        },
+
+        handleDelPlanItem(item){
+            let event = window.event || event;
+
+            event.stopPropagation();
+            event.preventDefault();
+
+            this._delPlanItem(item.id);
+        },
+        _delPlanItem(id){
+            delPlan({"id": id}).then(data => {
+                if(data.errorcode === SUC_CODE){
+                    alert('删除成功');
+                    this._getPlanList();
+                }else{
+                    alert('删除失败');
+                }
             })
         }
     }
@@ -177,6 +334,7 @@ export default{
             height: 3.5rem !important;
             box-sizing: border-box;
             .sc-menu-item-box{
+                display: flex;
                 height: .3rem !important;
                 line-height: .3rem !important;
             }
@@ -277,12 +435,23 @@ export default{
                 /*end*/
 
                 .sc-menu-item-box{
+                    display: flex;
+                    justify-content: space-between;
                     height: .4rem;
                     line-height: .4rem;
                     text-align: left;
                     text-indent: .1rem;
                     cursor: pointer;
                     border-bottom: 1px solid #333;
+                    .sc-del-plan-icon{
+                        color: red;
+                        font-size: 120%;
+                    }
+                }
+
+                /* 预案列表选中样式 */
+                .sc-screen-plan-select{
+                    background-color: deepskyblue !important;
                 }
             }
             .sc-menu-none{
@@ -323,11 +492,12 @@ export default{
                     width: .3rem;
                     height: .3rem;
                     margin: 0 auto .05rem auto;
-                    background-color: orange;
+                    background-size: 100% 100%;
+                    background-repeat: no-repeat;
                 }
             }
 
-            /*底部列表选中样式*/
+            /* 底部列表选中样式 */
             .sc-screen-list-select{
                 border: 2px solid yellowgreen;
                 box-shadow: 0 0 5px yellowgreen;

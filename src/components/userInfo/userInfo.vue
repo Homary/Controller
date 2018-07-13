@@ -5,7 +5,7 @@
         <span class="ui-head-en">GOCC </span><span class="ui-head-ch">智慧城市操控中心</span>
     </div>
     <div class="user-info-box">
-        <span class="ui-home" @click="$router.push({path: '/'})" v-if="noHome"></span>
+        <span class="ui-home" @click="clickGoHome" v-if="noHome"></span>
         <span class="user-head-img" 
             :style="{'background-image': 'url(' + userInfo.userIconUrl + ')'}">头像</span>
         <span class="point-hover">{{userInfo.userName}}</span>
@@ -42,10 +42,6 @@ console.log('用户ID不存在');
     },
     beforeMount: function() {
         this.$store.commit(types.SET_USER_INFO, STORAGE.KEY_USER_IFNO);
-
-        this.noHome = STORAGE.getStorage(STORAGE.KEY_HOME_ICON);
-        this.noSplit = STORAGE.getStorage(STORAGE.KEY_SPLIT_ICON);
-
     },
     mounted: function() {
         eventBus.$on('indexRouteChange', this.showHomeIcon);
@@ -71,11 +67,13 @@ console.log('用户ID不存在');
         },
         showHomeIcon(boo){
             this.noHome = boo;
-            STORAGE.setStorage(STORAGE.KEY_HOME_ICON, boo);
         },
         showSplitIcon(boo){
             this.noSplit = boo;
-            STORAGE.setStorage(STORAGE.KEY_SPLIT_ICON, boo);
+        },
+        clickGoHome(){
+            this.$router.push( {path: '/'} );
+            this.$store.commit(types.CLAER_SPLIT_ID);
         }
     }
 }

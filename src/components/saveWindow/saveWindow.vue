@@ -4,7 +4,7 @@
     <form action="">
     <div class="sw-center">
         <label for="input">预案名称</label>
-        <input type="text" id="input" v-model = "name"/>
+        <input type="text" id="input" v-model = "plan_name"/>
     </div>
     <div class="sw-btns-box">
         <button class="sw-btn-left" @click = "handleSure">确定</button>
@@ -21,7 +21,7 @@ export default{
     props: ['win_condition'],
     data: function() {
         return {
-            name: ''
+            plan_name: ''
         }
     },
     methods: {
@@ -29,16 +29,16 @@ export default{
             this.submitName();
         },
         handleQuit(){
-            this.hideWindow();
+            this.$emit('win_hidden');
         },
-        hideWindow(name = null){
-            this.$emit('win_false', name);
+        hideWindow(n){
+            this.$emit('win_hidden', n);
         },
         submitName(){
-            if(!this.name.trim().length){
+            if(!this.plan_name.trim().length){
                 alert('请填写名称');
             }else{
-                this.hideWindow(this.name);
+                this.hideWindow(this.plan_name);
             }
         }
     }

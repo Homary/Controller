@@ -4,7 +4,9 @@
     <i class="left-btn nav-btn" @click = "handleLeft"></i>
     <div class="in-screen">
         <div class="item-box">
-            <span class="nav-item" @click="goNextMenu(index)"  v-for="(item, index) in list_show" >
+            <span class="nav-item" :style="{'background-image': 'url(' + item.iconUrl + ')'}"
+                @click="handleClick(index, item)" 
+                v-for="(item, index) in list_show" >
                 {{item.name}}
             </span>
         </div>
@@ -15,7 +17,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-import * as types from '@src/store/mutation-types.js';
+import * as types from '@src/store/mutation-types';
+import {_sendInstruction } from '@common/js/instruction';
 
 export default{
     name: 'slideShow',
@@ -30,6 +33,8 @@ export default{
     beforeMount(){
         this.indexs = this.setPath(this.$router.history.current.path);
         this.initData();
+
+        this.setScreenSystem(this.indexs[0]);
     },
     watch: {
         '$route': function(newVal, old) {
@@ -43,10 +48,10 @@ export default{
             let _indexs = Array.from(this.indexs);
             let _l = _indexs.shift();
 
+            // 如果不存在list, 就从缓存中取
             if(!this.$store.state.list.length){
                 this.$store.commit(types.FLASE_NAV_LIST);
             }
-
             this.list_show = this.$store.state.list[_l].subSystem;
 
             while(_indexs.length){
@@ -59,6 +64,7 @@ export default{
                 }
             }
 
+            // 分割数据
             if(this.list_show.length > 8){
 
                 let _list = [],
@@ -72,6 +78,12 @@ export default{
                 }
             }
         },
+
+        /**
+         * 分割路由路径
+         * @param {String} path 路径
+         * 'subList/0/0 -> [0, 0]'
+         */
         setPath(path){
 
             let _arr = path.split('/');
@@ -84,6 +96,12 @@ export default{
 
             return _arr;
         },
+        handleClick(index, item){
+
+            this.goNextMenu(index);
+
+            this.sendInstruction(item);
+        },
         goNextMenu(index){
             let params = '';
 
@@ -91,15 +109,41 @@ export default{
 
                 this.indexs.push(index);
                 for(let i=0, len=this.indexs.length; i<len; i++){
+
                     params += `/${this.indexs[i]}`;
                 }
-
                 this.$router.push({path: `/subList${params}`});
             }else{
-
 console.log('最后一级菜单')
                 // 最后一级菜单
+            }
+        },
+        sendInstruction(item){
+            let ins = item.instruction,
+                key = item.routingkey;
 
+            _sendInstruction(ins, key);
+        },
+        setScreenSystem(sysId){
+
+            /**
+             * 如果存在 screenId 说明页面是由分屏页面选择系统跳转过来的
+             */
+            if(this.$store.state.screen.screenId){
+
+                let _screens = Array.from(this.$store.state.screen.windows),
+                    position = this.$store.state.position;
+
+                sysId = this.$store.state.list[sysId].id; // 将索引转为id
+
+                for(let i=0, len = _screens.length; i<len; i++){
+
+                    if(_screens[i].position === position){
+
+                        // 设置当前选中窗口的信息 i: windows中的索引, sysId: 系统id
+                        this.$store.commit(types.SET_SYS_ID, {i, sysId});
+                    }
+                }
             }
         },
         handleRight: function() {
@@ -210,7 +254,6 @@ console.log('最后一级菜单')
                 text-align: center;
                 text-decoration: none !important;
                 line-height: 15;
-                background-image: url('制作门户.png');
                 background-size: .7rem .7rem;
                 background-repeat: no-repeat;
                 background-position: 50% 40%;
