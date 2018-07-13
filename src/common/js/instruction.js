@@ -9,7 +9,7 @@ console.log(ins, key)
                 if(data.msg){
                     alert(data.msg);
                 }else{
-                    alert('指令发送失败');
+                    console.log('指令发送失败');
                 }
             }else{
                 console.log(`指令: ${ins} & ${key}发送成功`);

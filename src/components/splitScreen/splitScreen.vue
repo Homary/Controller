@@ -104,8 +104,6 @@ export default{
                 if(vm.$store.state.position){
                     vm.noneSelect = false; // 标识页面是否已经选择了分屏
                     vm.setSelectSys();
-
-        console.log(vm.$store.state.splitId)
                 }     
             });
         }else{
@@ -220,7 +218,11 @@ export default{
                 windows = [];
 
             for(let i=0, len=keys.length; i<len; i++){
-                windows.push({wid: '', sysId: -1});
+                windows.push({
+                    wid: '', 
+                    sysId: -1,
+                    wIndex: 0
+                });
 
                 if(mode[keys[i]].id >= 0){
 
@@ -230,8 +232,9 @@ export default{
                 }
                 
                 windows[i].wid = keys[i];
+                windows[i].wIndex = mode[keys[i]].wIndex;
             }
-console.log('y')
+
             // 取得当前各个分屏信息
             // POST 请求
             this._savePlan({
@@ -327,7 +330,24 @@ console.log('y')
 
 <style rel="stylesheet/less" lang="less" scoped>
 
-@media only screen and (min-width: 1500px) {
+
+// 屏幕高度 < 800px;
+@media only screen and (max-height: 700px){
+    .sc-top-box{
+        height: 3.2rem !important;
+        .sc-menu-contain{
+            height: 3rem !important;
+            box-sizing: border-box;
+            .sc-menu-item-box{
+                display: flex;
+                height: .3rem !important;
+                line-height: .3rem !important;
+            }
+        }
+    }
+}
+
+@media only screen and (max-height: 1000px) and (min-width: 1400px){
     .sc-top-box{
         height: 4rem !important;
         .sc-menu-contain{
@@ -341,6 +361,8 @@ console.log('y')
         }
     }
 }
+
+// 屏幕宽度 > 1700px;
 @media only screen and (min-width: 1700px) {
     .sc-top-box{
         height: 3.5rem !important;
@@ -444,6 +466,7 @@ console.log('y')
                     cursor: pointer;
                     border-bottom: 1px solid #333;
                     .sc-del-plan-icon{
+                        margin-right: 10px;
                         color: red;
                         font-size: 120%;
                     }

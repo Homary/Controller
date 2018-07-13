@@ -367,22 +367,12 @@
                     <button @click="handleClick('clear')">清空</button>
                 </div>
             </div>
-            <div class="screen-right">
-                <div class="screen-right-top screen-size">
-                    <button @click="handleClick('select')" v-show="$store.state.cur_sys['diy']['screen-right-top']['name'].length === 0">选择信号</button>
-                <div class="screen-system-show" v-show="$store.state.cur_sys['diy']['screen-right-top']['name'].length !== 0">
-                    <h5>{{$store.state.cur_sys['diy']['screen-right-top']['name']}}</h5>
+            <div class="screen-right screen-size">
+                <button @click="handleClick('select')" v-show="$store.state.cur_sys['diy']['screen-right']['name'].length === 0">选择信号</button>
+                <div class="screen-system-show" v-show="$store.state.cur_sys['diy']['screen-right']['name'].length !== 0">
+                    <h5>{{$store.state.cur_sys['diy']['screen-right']['name']}}</h5>
                     <button @click="handleClick('toggle')">切换系统</button>
                     <button @click="handleClick('clear')">清空</button>
-                </div>
-                </div>
-                <div class="screen-right-bottom screen-size">
-                    <button @click="handleClick('select')" v-show="$store.state.cur_sys['diy']['screen-right-bottom']['name'].length === 0">选择信号</button>
-                <div class="screen-system-show" v-show="$store.state.cur_sys['diy']['screen-right-bottom']['name'].length !== 0">
-                    <h5>{{$store.state.cur_sys['diy']['screen-right-bottom']['name']}}</h5>
-                    <button @click="handleClick('toggle')">切换系统</button>
-                    <button @click="handleClick('clear')">清空</button>
-                </div>
                 </div>
             </div>
         </div>
@@ -398,6 +388,8 @@ export default{
     name: 'screen',
     data: function() {
         return {
+
+            // 映射表, 后台返回的分屏模式 -> DOM节点上的ref属性
             mapTable: {
                 '全屏': 'fullScreen',
                 '二分屏': 'diy',
@@ -754,20 +746,13 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
             height: 100%;
             box-sizing: border-box;
             .screen-left{
-                flex: 1 1 50%;
+                flex: 1 1 66%;
                 margin-right: 10px;
             }
             .screen-right{
-                flex: 1 1 50%;
+                flex: 1 1 33%;
                 display: flex;
                 flex-direction: column;
-                .screen-right-top{
-                    flex: 1 1 50%;
-                    margin-bottom: 10px;
-                }
-                .screen-right-bottom{
-                    flex: 1 1 50%
-                }
             }
         }
         /*end*/
