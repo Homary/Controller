@@ -7,8 +7,7 @@
                 <div class="sc-top-screen">
                     <screen v-show = "!noneSelect" :screen_id="screen_id"></screen>
                     <div class="sc-screen-none sc-none-box" v-if = "noneSelect">
-                        <i class="sc-none-icon"></i>
-                        <span class="sc-none-single">无信号</span>
+                        <span class="sc-none-single">选择分屏方式</span>
                     </div>
                     <saveWindow :win_condition = "win_condition" v-on:win_hidden= "hideWindow"
             class="sc-screen-none"></saveWindow>
@@ -31,8 +30,8 @@
                 <ul class="sc-bottom-menu-box">
                     <li tag="li" :class="['sc-bottom-menu-item' ,{'sc-screen-list-select':  item.id == $store.state.splitId}]" :id="item.id" 
                         v-for = "item in screenList" :key = "item.id" :name = "item.name"
-                        @click = "handleScreenSelect">
-                        <div @click = "noneSelect = false">
+                        @click = "handleScreenSelect" :ref="'screenItem' + item.id">
+                        <div>
                             <i class="sc-bottom-menu-item-icon" :style="{'background-image': 'url('+ item.iconUrl +')'}"></i>
                             <span>{{item.name}}</span>
                         </div>
@@ -85,11 +84,22 @@ export default{
         }
     },
     mounted(){
-        eventBus.$on('_getScreenData', this.getScreenData);
-    },
-    beforeMount() {
         this._getScreenList();
         this._getPlanList();
+
+        this.$nextTick(() => {
+
+            // 初始化为全屏模式
+            this.sendScreenId('全屏');
+
+            this.setSelectId('1');
+
+            this.noneSelect = false;
+        })
+        
+    },
+    beforeMount() {
+        
     },
     beforeRouteEnter(to, from, next){
         let path = from.path; 
@@ -153,8 +163,6 @@ export default{
             this.sendScreenId(event.currentTarget.getAttribute('name'));
 
             this.setSelectId(event.currentTarget.getAttribute('id'));
-
-            this.send
         },
 
         addSelectClass(elm){
@@ -522,8 +530,9 @@ export default{
 
             /* 底部列表选中样式 */
             .sc-screen-list-select{
-                border: 2px solid yellowgreen;
-                box-shadow: 0 0 5px yellowgreen;
+                background-image: url('选中底图.png');
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
             }
         }
         .sc-button-box{

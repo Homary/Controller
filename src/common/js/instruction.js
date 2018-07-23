@@ -2,8 +2,11 @@ import {sendInstruction} from '@api/index';
 import {SUC_CODE} from '@common/js/stateCode';
 
 export function _sendInstruction(ins, key) {
-console.log(ins, key)
-    sendInstruction({"instruction": ins, "routingKey": key})
+    sendInstruction({"instruction": {
+        "target": ins.target,
+        "action": ins.action,
+        "params": {}
+    }, "routingKey": key})
         .then(data => {
             if(data.errorcode !== SUC_CODE){
                 if(data.msg){
