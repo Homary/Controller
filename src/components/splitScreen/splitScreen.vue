@@ -48,12 +48,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {getScreenList, getPlanList, savePlan, delPlan} from '@api/index';
+import {getScreenList, getPlanList, savePlan, delPlan, sendSwitchScreenIns} from '@api/index';
 import screen from '@components/screen/screen.vue';
 import saveWindow from '@components/saveWindow/saveWindow.vue';
 import eventBus from '@common/js/eventBus';
 import * as types from '@src/store/mutation-types';
-import {SUC_CODE, ERR_GET_SCREEN_INFO, ERR_GET_PLAN_LIST, ERR_SAVE_PLAN_INFO} from '@common/js/stateCode';
+import {SUC_CODE, ERR_GET_SCREEN_INFO, ERR_GET_PLAN_LIST, ERR_SAVE_PLAN_INFO, ERR_SENT_TIME_OUT} from '@common/js/stateCode';
 
 export default{
     name: 'splitSreen',
@@ -89,17 +89,26 @@ export default{
 
         this.$nextTick(() => {
 
-            // 初始化为全屏模式
-            this.sendScreenId('全屏');
+            if( !this.$store.state.position ){
 
-            this.setSelectId('1');
+                // 初始化为全屏模式
+                this.sendScreenId('全屏');
+
+                this.setSelectId('1');
+            }else{
+                this.sendScreenId(this.$store.state.screen.screenId);
+
+                this.setSelectId(this.$store.state.splitId);
+            }
 
             this.noneSelect = false;
+console.log('mounted')
+            eventBus.$on('sendInstruction', this._sendScreenInstruction);
         })
         
     },
     beforeMount() {
-        
+
     },
     beforeRouteEnter(to, from, next){
         let path = from.path; 
@@ -132,6 +141,7 @@ export default{
                     alert(data.msg);
                 }else if(data.errorcode === SUC_CODE){
                     this.screenList = data.data.screen;
+                    this.$store.commit(types.SET_ACTION, data.data.action);
                 }
             })
         },
@@ -143,6 +153,83 @@ export default{
                     alert(data.msg);
                 }else if(data.errorcode === SUC_CODE){
                     this.planList = data.data.plans;
+                }
+            })
+        },
+
+        _sendScreenInstruction(){
+
+            let action = this.$store.state.action ? this.$store.state.action.switchScreen : null,
+                splitId = this.$store.state.splitId,
+                screenId = this.$store.state.screen.screenId,
+                windows = this.$store.state.cur_sys[this.mapTable[screenId]],
+                _wins = [],
+                data = {};
+
+            if( !this.$store.state.toggleSys ){
+                for(let key in windows){
+                    let _winItem = Object.assign({}, windows[key]);
+                    _wins.push({
+                        "wIndex": _winItem.wIndex,
+                        "sysId": _winItem.id,
+                        "wid": key
+                    });
+                }
+
+                data = {
+                    "action": action,
+                    "params": {
+                        "splitId": splitId*1,
+                        "windows": _wins
+                    }
+                }
+
+            }else{
+                let position = this.$store.state.position,
+                    sysId = this.$store.state.sysId,
+                    wIndex = this.$store.state.cur_sys[this.mapTable[screenId]][position].wIndex;
+
+                data = {
+                    "action": action,
+                    "params": {
+                        "splitId": splitId*1,
+                        "wIndex": wIndex,
+                        "sysId": sysId
+                    }
+                }
+
+                this.$store.commit(types.SET_TOGGLE_SYS);
+            }
+            
+            // 防止多次触发
+            eventBus.$off('sendInstruction');
+
+            this._sendInstruction(data);
+
+        },
+
+        _sendInstruction(data){
+
+            // 过滤掉未选择系统的窗口
+            if(data.params.windows){
+                for(let i=0, len=data.params.windows.length; i<len; i++){
+                    if(data.params.windows[i].sysId < 0){
+                        data.params.windows.splice(i, 1);
+                    }
+                }
+            }
+            
+            if(!data.action){
+                return;
+            }
+
+            sendSwitchScreenIns(data).then((data) => {
+                if(data.errorcode === ERR_SENT_TIME_OUT){
+                    alert('请求超时');
+                }else if(data.errorcode === SUC_CODE){
+                    console.log('分屏指令发送成功')
+                }else{
+                    alert('未知错误');
                 }
             })
         },

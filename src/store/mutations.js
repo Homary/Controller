@@ -33,10 +33,10 @@ export default {
      */
     [types.SET_SELECT_SYS] (state, screenInfo){
 
-        let screens = Object.assign({}, state.screen);
         let windows = {};
         windows.position = screenInfo.position;
         windows.sysId = screenInfo.sysId;
+        windows.wIndex = screenInfo.wIndex;
 
         state.sysId = screenInfo.sysId;
         state.position = screenInfo.position;
@@ -70,6 +70,8 @@ export default {
 
     /**
      *  切换分屏数据
+     *  旧模式数据 -> 新模式数据
+     *  旧模式数据清空
      */
     [types.TOGGLE_SCREEN_DATA] (state, modes){
         let old_mode = modes.old_mode,
@@ -80,8 +82,11 @@ export default {
 
         for(let i=0; i<len; i++){
            state.cur_sys[new_mode][new_keys[i]] = state.cur_sys[old_mode][old_keys[i]];
-           state.cur_sys[old_mode][old_keys[i]] = { name: '', id: '' };
+
+           let wIndex = state.cur_sys[old_mode][old_keys[i]].wIndex;
+           state.cur_sys[old_mode][old_keys[i]] = { name: '', id: '', wIndex};
         }
+console.log('state数据处理完成')
     },
 
     /**
@@ -133,6 +138,18 @@ console.log(data)
 
     [types.CLAER_SPLIT_ID] (state){
         state.splitId = -1;
+    },
+
+    [types.SET_TIP_SPLIT] (state){
+        state.tipSplit = !state.tipSplit;
+    },
+
+    [types.SET_ACTION] (state, action){
+        state.action = action;
+    },
+
+    [types.SET_TOGGLE_SYS] (state){
+        state.toggleSys = !state.toggleSys;
     }
 }
 

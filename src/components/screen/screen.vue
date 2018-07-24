@@ -444,9 +444,12 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                         }
                         
                     }
+                    
                 }else{
-                    console.log(len)
+                    // $refs不存在
                 }
+
+                eventBus.$emit('sendInstruction');
             },
             immediate: true
         }
@@ -539,6 +542,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                     position = this.getPosition(path);
 
                     this.setCurSelectScreen(position); 
+                    this.$store.commit(types.SET_TOGGLE_SYS);
                     break;
 
                 case 'clear':
@@ -558,9 +562,11 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
          * @param {string} position 小窗口的位置
          */
         setCurSelectScreen(position){
-            let screenId = this.screen_id;
 
-            this.$store.commit(types.SET_SELECT_SYS, {screenId, position, sysId: null});
+            let screenId = this.screen_id,
+                wIndex = this.$store.state.cur_sys[this.mapTable[this.screen_id]][position].wIndex; // 窗口编号从0开始
+
+            this.$store.commit(types.SET_SELECT_SYS, {screenId, position, sysId: null, wIndex});
             this.$router.push({path: '/'});
         },
         /**

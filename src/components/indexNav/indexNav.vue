@@ -4,12 +4,12 @@
     <i class="left-btn nav-btn" @click = "handleLeft"></i>
     <div class="in-screen">
         <div class="item-box" v-for="item in sysList">
-            <router-link :to="'/subList/' + index" class="nav-item" 
-                @click.native="handleClick(sub_item)"
+            <span class="nav-item" 
+                @click="handleClick(sub_item, index)"
                 v-for="(sub_item, index) in item"  :key="sub_item.id"
                 :style="{'background-image': 'url('+ sub_item.iconUrl +')'}">
                 {{sub_item.name}}
-            </router-link>
+            </span>
         </div>
     </div>
     <i class="right-btn nav-btn" @click = "handleRight"></i>
@@ -21,29 +21,72 @@ import { getSysList } from '@api/index';
 import { SUC_CODE, ERR_GET_SYSTEM_INFO} from '@common/js/stateCode';
 import * as types from '@src/store/mutation-types';
 import { _sendInstruction } from '@common/js/instruction';
+import eventBus from '@common/js/eventBus';
 
 export default{
     name: '',
     data: function() {
         return {
             count: 0,
-            sysList: null    
+            sysList: null,
+            splitScreen: false 
         }
     },
     beforeMount: function() {
         this._getSysList();
     },
     methods: {
-        handleClick(item){
+        handleClick(item, index){
             let event = window.event || event;
 
-            this.sendInstruction(item);
+            this.pushRoute(index, item);
         },
         sendInstruction(item){
             let ins = item.instruction,
                 key = item.routingkey;
 
             _sendInstruction(ins, key);
+        },
+        pushRoute(index, item){
+            if(this.$store.state.tipSplit){
+
+                this.$store.commit(types.SET_TIP_SPLIT);
+                this.setScreenSystem(index);
+                this.$router.push({path: '/splitScreen'});
+
+            }else{
+                this.$router.push({path: `/subList/${index}`});
+
+                // 发送指令
+                this.sendInstruction(item);
+            }
+        },
+
+        /**
+         * 设置窗口系统 -> 将主页选择的系统展示到分屏上
+         * @param {num} sysId 系统ID
+         */
+        setScreenSystem(sysId){
+
+            /**
+             * 如果存在 screenId 说明页面是由分屏页面选择系统跳转过来的
+             */
+            if(this.$store.state.screen.screenId){
+
+                let _screens = Array.from(this.$store.state.screen.windows),
+                    position = this.$store.state.position;
+
+                sysId = this.$store.state.list[sysId].id; // 将索引转为id
+
+                for(let i=0, len = _screens.length; i<len; i++){
+
+                    if(_screens[i].position === position){
+
+                        // 设置当前选中窗口的信息 i: windows中的索引, sysId: 系统id
+                        this.$store.commit(types.SET_SYS_ID, {i, sysId});
+                    }
+                }
+            }
         },
 
         handleRight() {
@@ -146,7 +189,7 @@ export default{
                 background-repeat: no-repeat;
                 background-position: 50% 40%;
             }
-            a{
+            span{
                 text-decoration: none !important;
                 color: rgba(255, 255, 255, .8) !important;
                 opacity: .8;

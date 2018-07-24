@@ -10,3 +10,6 @@ export const SET_SPLIT_ID = 'SET_SPLIT_ID';
 export const CLAER_SPLIT_ID = 'CLAER_SPLIT_ID';
 export const SET_PLAN_DATA = 'SET_PLAN_DATA';
 export const SET_SCREEN_ID = 'SET_SCREEN_ID';
+export const SET_TIP_SPLIT = 'SET_TIP_SPLIT';
+export const SET_ACTION = 'SET_ACTION';
+export const SET_TOGGLE_SYS = 'SET_TOGGLE_SYS';

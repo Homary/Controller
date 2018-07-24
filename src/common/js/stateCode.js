@@ -14,4 +14,5 @@
     export const ERR_CHECK_PASS = "1701";       // 密码修改失败
     export const ERR_CONNECT_SERVER = "1800";   // 消息队列服务器连接异常
     export const ERR_SENT_ORDER = "1801";       // 指令发送失败
+    export const ERR_SENT_TIME_OUT = "1804";    // 指令发送超时
     export const ERR_GET_TS = "1900";           // 获取暂存数据失败

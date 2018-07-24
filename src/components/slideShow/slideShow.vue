@@ -33,8 +33,6 @@ export default{
     beforeMount(){
         this.indexs = this.setPath(this.$router.history.current.path);
         this.initData();
-
-        this.setScreenSystem(this.indexs[0]);
     },
     watch: {
         '$route': function(newVal, old) {
@@ -123,28 +121,6 @@ console.log('最后一级菜单')
                 key = item.routingkey;
 
             _sendInstruction(ins, key);
-        },
-        setScreenSystem(sysId){
-
-            /**
-             * 如果存在 screenId 说明页面是由分屏页面选择系统跳转过来的
-             */
-            if(this.$store.state.screen.screenId){
-
-                let _screens = Array.from(this.$store.state.screen.windows),
-                    position = this.$store.state.position;
-
-                sysId = this.$store.state.list[sysId].id; // 将索引转为id
-
-                for(let i=0, len = _screens.length; i<len; i++){
-
-                    if(_screens[i].position === position){
-
-                        // 设置当前选中窗口的信息 i: windows中的索引, sysId: 系统id
-                        this.$store.commit(types.SET_SYS_ID, {i, sysId});
-                    }
-                }
-            }
         },
         handleRight: function() {
             this.count++;

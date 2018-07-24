@@ -15,7 +15,7 @@ export function _sendInstruction(ins, key) {
                     console.log('指令发送失败');
                 }
             }else{
-                console.log(`指令: ${ins} & ${key}发送成功`);
+                console.log(`指令: 发送成功`);
             }
         })
 }

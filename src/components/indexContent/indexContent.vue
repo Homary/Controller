@@ -9,7 +9,8 @@
 <script type="text/ecmascript-6">
 import bgCanvas from '@components/bgCanvas/bgCanvas.vue';
 import indexNav from '@components/indexNav/indexNav.vue';
-import eventBus from '@common/js/eventBus.js';
+import eventBus from '@common/js/eventBus';
+import * as types from '@src/store/mutation-types';
 
 export default{
     name: 'indexContent',
@@ -24,7 +25,11 @@ export default{
     },
     beforeRouteEnter(to, from, next){
         eventBus.$emit('indexRouteChange', false);
-        next();
+        next((vm) => {
+            if(from.fullPath === '/splitScreen'){
+                vm.$store.commit(types.SET_TIP_SPLIT);
+            }
+        });
     }
 }
 </script>
