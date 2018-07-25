@@ -219,7 +219,7 @@ console.log('mounted')
                 }
             }
             
-            if(!data.action){
+            if(!data.action || !data.params.windows.length){
                 return;
             }
 

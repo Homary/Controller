@@ -4,7 +4,7 @@
     <div ref = "fullScreen" class="screen-contain-box">
         <div class="full-screen-box">
             <div class="screen-center screen-size">
-                <button @click="handleClick('select')" v-show="$store.state.cur_sys['fullScreen']['screen-center']['name'].length === 0" class="none-single-button">无信号</button>
+                <button @click="handleClick('select')" @tap="handleClick('select')" v-show="$store.state.cur_sys['fullScreen']['screen-center']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['fullScreen']['screen-center']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['fullScreen']['screen-center']['name']}}</h5>
                     <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
@@ -383,6 +383,8 @@
 <script type="text/ecmascript-6">
 import eventBus from '@common/js/eventBus';
 import * as types from '@src/store/mutation-types';
+import {clearWindow} from '@api/index';
+import {SUC_CODE} from '@common/js/stateCode';
 
 export default{
     name: 'screen',
@@ -550,6 +552,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                     position = this.getPosition(path);
 
                     this.clearCurSystem(this.mapTable[this.screen_id], position);
+                    this._clearWindow(this.mapTable[this.screen_id], position);
                     break;
 
                 default: 
@@ -588,6 +591,26 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
          */
         clearCurSystem(screen_id, position){
             this.$store.commit(types.CLEAR_CUR_SYS, {screen_id, position});
+        },
+
+        _clearWindow(screen_id, position){
+            let wIndex = this.$store.state.cur_sys[screen_id][position].wIndex,
+                splitId = this.$store.state.splitId,
+                action = this.$store.state.action.closeWindow;
+
+            clearWindow({
+                "action": action,
+                "params": {
+                    "wIndex": wIndex,
+                    "splitId": splitId   
+                }
+            }).then(data => {
+                if(data.errorcode === SUC_CODE){
+                    console.log('关闭指令发送成功');
+                }else{
+                    alert(data.msg);
+                }
+            })
         }
     }
 }
