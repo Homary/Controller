@@ -48,7 +48,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {getScreenList, getPlanList, savePlan, delPlan, sendSwitchScreenIns} from '@api/index';
+import {getScreenList, getPlanList, savePlan, delPlan, sendSwitchScreenIns, sendPlanId} from '@api/index';
 import screen from '@components/screen/screen.vue';
 import saveWindow from '@components/saveWindow/saveWindow.vue';
 import eventBus from '@common/js/eventBus';
@@ -84,6 +84,11 @@ export default{
         }
     },
     mounted(){
+
+        // 主页以及分屏图标
+        eventBus.$emit('splitRouteChange', false);
+        eventBus.$emit('indexRouteChange', true);
+
         this._getScreenList();
         this._getPlanList();
 
@@ -104,14 +109,13 @@ export default{
             this.noneSelect = false;
 console.log('mounted')
             eventBus.$on('sendInstruction', this._sendScreenInstruction);
+            eventBus.$on('toggleScreenMode', this.isSelectSys);
+            eventBus.$on('toggleSys', this.isToggleSys);
         })
         
     },
-    beforeMount() {
-
-    },
     beforeRouteEnter(to, from, next){
-        let path = from.path; 
+        let path = from.path;
 
         eventBus.$emit('splitRouteChange', false);
 
@@ -158,7 +162,6 @@ console.log('mounted')
         },
 
         _sendScreenInstruction(){
-
             let action = this.$store.state.action ? this.$store.state.action.switchScreen : null,
                 splitId = this.$store.state.splitId,
                 screenId = this.$store.state.screen.screenId,
@@ -166,11 +169,13 @@ console.log('mounted')
                 _wins = [],
                 data = {};
 
+            // 切换分屏
             if( !this.$store.state.toggleSys ){
                 for(let key in windows){
                     let _winItem = Object.assign({}, windows[key]);
+
                     _wins.push({
-                        "wIndex": _winItem.wIndex,
+                        "windex": _winItem.wIndex,
                         "sysId": _winItem.id,
                         "wid": key
                     });
@@ -184,54 +189,106 @@ console.log('mounted')
                     }
                 }
 
+                this._sendInstruction(data, 'screen');
+
+            // 切换系统时
             }else{
                 let position = this.$store.state.position,
                     sysId = this.$store.state.sysId,
-                    wIndex = this.$store.state.cur_sys[this.mapTable[screenId]][position].wIndex;
+                    wIndex = this.$store.state.cur_sys[this.mapTable[screenId]][position].wIndex,
+                    action = this.$store.state.action.switchSystem;
+
+                if(!sysId) {
+                    return;
+                }
 
                 data = {
                     "action": action,
                     "params": {
                         "splitId": splitId*1,
-                        "wIndex": wIndex,
+                        "windex": wIndex,
                         "sysId": sysId
                     }
                 }
 
-                this.$store.commit(types.SET_TOGGLE_SYS);
+                this._sendInstruction(data, 'system');
             }
-            
+          
             // 防止多次触发
             eventBus.$off('sendInstruction');
-
-            this._sendInstruction(data);
+            eventBus.$off('isToggleSys');
 
         },
 
-        _sendInstruction(data){
+        _sendInstruction(data, type){
+            let _windows = [];
 
-            // 过滤掉未选择系统的窗口
-            if(data.params.windows){
-                for(let i=0, len=data.params.windows.length; i<len; i++){
-                    if(data.params.windows[i].sysId < 0){
-                        data.params.windows.splice(i, 1);
+            try{
+                if(!data.action || !data.params.windows.length){
+                    return;
+                }
+                
+            }catch(err){
+                // 切换系统时某些属性不存在
+            }     
+
+            switch(type){
+                case 'screen':
+                    // 过滤掉未选择系统的窗口
+                    if(data.params.windows){
+                        for(let i=0, len=data.params.windows.length; i<len; i++){
+                            if(data.params.windows[i].sysId >= 0){
+                                _windows.push(data.params.windows[i]);
+                            }
+                        }
+
+                        data.params.windows = _windows;
                     }
-                }
-            }
-            
-            if(!data.action || !data.params.windows.length){
-                return;
-            }
 
-            sendSwitchScreenIns(data).then((data) => {
-                if(data.errorcode === ERR_SENT_TIME_OUT){
-                    alert('请求超时');
-                }else if(data.errorcode === SUC_CODE){
-                    console.log('分屏指令发送成功')
-                }else{
-                    alert('未知错误');
-                }
-            })
+                    // 选择预案, 不发送请求
+                    if( this.$store.state.planData){
+                        return; 
+                    }
+
+                    sendSwitchScreenIns(data).then((data) => {
+                        if(data.errorcode === ERR_SENT_TIME_OUT){
+                            alert('请求超时');
+                        }else if(data.errorcode === SUC_CODE){
+                            console.log('分屏指令发送成功');
+                        }else{
+                            alert('未知错误');
+                        }
+                    })
+
+                    // 选择了系统,下一次选择就是切换
+                    this.$store.commit(types.SET_TOGGLE_SYS, true);
+
+                    break;
+
+                case 'system':
+                    
+                    sendSwitchScreenIns(data).then((data) => {
+                        if(data.errorcode === ERR_SENT_TIME_OUT){
+                            alert('请求超时');
+                        }else if(data.errorcode === SUC_CODE){
+                            console.log('指令发送成功')
+                        }else{
+                            alert('未知错误');
+                        }
+
+                    })
+
+                    break;
+
+                default: 
+                    break;
+            }
+        },
+
+        // 切换系统时, 发送指令
+        isToggleSys(){
+console.log('切换系统');
+            this._sendScreenInstruction();
         },
 
         /**
@@ -250,6 +307,30 @@ console.log('mounted')
             this.sendScreenId(event.currentTarget.getAttribute('name'));
 
             this.setSelectId(event.currentTarget.getAttribute('id'));
+
+        },
+
+        // 切换分屏模式时, 系统存在
+        isSelectSys(){
+console.log('切换分屏');
+
+            let screen_id = this.screen_id,
+                systems = this.$store.state.cur_sys[this.mapTable[screen_id]];
+
+            // 选择了系统,下一次选择就是切换
+            this.$store.commit(types.SET_TOGGLE_SYS, false);
+
+            for(let key in systems){
+                if(systems[key].id >= 0){
+                    this._sendScreenInstruction();
+
+                    // 选择了系统,下一次选择就是切换
+                    this.$store.commit(types.SET_TOGGLE_SYS, true);
+
+                    return;
+                }
+            }
+
         },
 
         addSelectClass(elm){
@@ -354,10 +435,17 @@ console.log('mounted')
             let event = window.event || event;
 
             this.addSelectPlanClass(event.target);
+            this.clearPlan();
             this.selectPlan(item);
         },
-        selectPlan(item){
+        clearPlan(){
+console.log('清空')
+            this.$store.commit(types.INIT_CUR_SYS);
+        },
 
+        // todo bug
+        selectPlan(item){
+console.log('触发了')
             // 如果不存在list, 就从缓存中取
             if(!this.$store.state.list.length){
                 this.$store.commit(types.FLASE_NAV_LIST);
@@ -365,7 +453,8 @@ console.log('mounted')
 
             let _name,
                 name,
-                windows = item.windows;
+                windows = item.windows,
+                _id = item.id;
 
             for(let i=0, len=this.screenList.length; i<len; i++){
                 if(this.screenList[i].id == item.splitId){
@@ -373,9 +462,6 @@ console.log('mounted')
                 }
             }
             name = this.mapTable[_name];
-
-            this.$store.commit(types.SET_SPLIT_ID, item.splitId);
-            this.$store.commit(types.SET_PLAN_DATA, {name, windows});
 
             for(let i=0, len=this.screenList.length; i<len; i++){
 
@@ -387,6 +473,22 @@ console.log('mounted')
                     this.noneSelect = false; // 去掉无信号蒙版
                 }
             }
+
+            this.$store.commit(types.SET_SPLIT_ID, item.splitId);
+            this.$store.commit(types.SET_PLAN_DATA, {name, windows});
+
+            this._selectPlan({
+                "id": _id
+            });
+        },
+        _selectPlan(id){
+            sendPlanId(id).then(data => {
+                if(data.errorcode === SUC_CODE){
+                    console.log('选择预案成功');
+                }else{
+                    alert(data.msg);
+                }
+            })
         },
 
         handleHoverPlanList(index){

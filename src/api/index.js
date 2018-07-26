@@ -1,6 +1,7 @@
 const URL_SYS_LIST = '/system/getSysList'; // 获取系统列表
 const URL_SCREEN_LIST = '/screen/getScreenList'; // 获取分屏列表
 const URL_PLAN_LIST = '/plan/getPlanInfo'; // 获取预案列表
+const URL_SELECT_PLAN = '/plan/getPlanById'; // 选择预案
 const URL_SAVE_PLAN = '/plan/savePlanInfo'; // 保存预案
 const URL_DEL_PLAN = '/plan/deletePlanInfo'; // 删除预案
 const URL_SEND_INSTRUCTION = '/instruction/sendSysInstruction'; // 发送主页指令
@@ -29,6 +30,8 @@ export function getPlanList() {
 }
 
 export function savePlan(data) {
+console.log('保存预案')
+console.log(data)
     return axios.post(URL_SAVE_PLAN, data)
             .then((res) => {
                 return Promise.resolve(res.data);
@@ -51,10 +54,6 @@ console.log(data)
             })
 }
 
-/**
- * 发送分屏指令
- * @param  {object} data 
- */
 export function sendSwitchScreenIns(data) {
     return axios.post(URL_SWITCH_SCREEN_INSTRUCTION, data)
             .then(res => {
@@ -64,7 +63,15 @@ export function sendSwitchScreenIns(data) {
 }
 
 export function clearWindow(data) {
+console.log(data)
     return axios.post(URL_CLEAR_WINDOW, data)
+            .then( res => {
+                return Promise.resolve(res.data)
+            })
+}
+
+export function sendPlanId(data) {
+    return axios.post(URL_SELECT_PLAN, data)
             .then( res => {
                 return Promise.resolve(res.data)
             })

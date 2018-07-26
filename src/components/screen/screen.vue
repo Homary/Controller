@@ -409,7 +409,7 @@ export default{
         'screen_id': {
             handler: function(newVal, old){
 
-console.log(`旧分屏模式 -> %c ${old}`, 'color: #CD3278');               
+console.log(`旧分屏模式 -> %c ${old}`, 'color: #CD3278');
 console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
 
                 this.showScreen(newVal);
@@ -421,7 +421,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                 if(this.$store.state.position && len.length || this.$store.state.planData){
 
                     // 分屏模式的切换, old为空: 路由来自主页
-                    //                  不为空: 模式切换 
+                    //                  不为空: 模式切换
                     //           出现old, newVal为undefined的情况
                     if(typeof old === 'undefined'){
                         old = ''
@@ -441,6 +441,9 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
 
                         try{
                             this.$store.commit(types.TOGGLE_SCREEN_DATA, {old_mode, new_mode});
+
+                            // 通知splitScreen
+                            eventBus.$emit('toggleScreenMode');
                         }catch(error){
                             console.log(`旧分屏模式 -> %c ${old}`, 'color: #CD3278');
                         }
@@ -544,7 +547,9 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                     position = this.getPosition(path);
 
                     this.setCurSelectScreen(position); 
-                    this.$store.commit(types.SET_TOGGLE_SYS);
+                    this.$store.commit(types.SET_TOGGLE_SYS, true);
+
+                    eventBus.$emit('toggleSys');
                     break;
 
                 case 'clear':
@@ -594,6 +599,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
         },
 
         _clearWindow(screen_id, position){
+console.log('关闭指令');
             let wIndex = this.$store.state.cur_sys[screen_id][position].wIndex,
                 splitId = this.$store.state.splitId,
                 action = this.$store.state.action.closeWindow;
@@ -601,7 +607,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
             clearWindow({
                 "action": action,
                 "params": {
-                    "wIndex": wIndex,
+                    "windex": wIndex,
                     "splitId": splitId   
                 }
             }).then(data => {
@@ -637,6 +643,10 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                 background-color: transparent;
             }
             .none-single-button{
+
+                // 使Safari点击事件生效
+                cursor: pointer;
+
                 &:before{
                     content: '';
                     display: block;

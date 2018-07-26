@@ -13,3 +13,4 @@ export const SET_SCREEN_ID = 'SET_SCREEN_ID';
 export const SET_TIP_SPLIT = 'SET_TIP_SPLIT';
 export const SET_ACTION = 'SET_ACTION';
 export const SET_TOGGLE_SYS = 'SET_TOGGLE_SYS';
+export const INIT_CUR_SYS = 'INIT_CUR_SYS';

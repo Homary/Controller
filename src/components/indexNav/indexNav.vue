@@ -39,15 +39,19 @@ export default{
         handleClick(item, index){
             let event = window.event || event;
 
-            this.pushRoute(index, item);
+            this.pushRoute(item, index);
         },
         sendInstruction(item){
             let ins = item.instruction,
                 key = item.routingkey;
 
+            // 不发送指令
+            if(!ins.action){
+                return;
+            }
             _sendInstruction(ins, key);
         },
-        pushRoute(index, item){
+        pushRoute(item, index){
             if(this.$store.state.tipSplit){
 
                 this.$store.commit(types.SET_TIP_SPLIT);

@@ -5,7 +5,7 @@ export function _sendInstruction(ins, key) {
     sendInstruction({"instruction": {
         "target": ins.target,
         "action": ins.action,
-        "params": {}
+        "params": ins.params,
     }, "routingKey": key})
         .then(data => {
             if(data.errorcode !== SUC_CODE){
