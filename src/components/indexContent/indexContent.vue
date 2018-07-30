@@ -25,11 +25,7 @@ export default{
     },
     beforeRouteEnter(to, from, next){
         eventBus.$emit('indexRouteChange', false);
-        next((vm) => {
-            if(from.fullPath === '/splitScreen'){
-                vm.$store.commit(types.SET_TIP_SPLIT);
-            }
-        });
+        next();
     }
 }
 </script>

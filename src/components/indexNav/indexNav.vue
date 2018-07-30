@@ -52,9 +52,9 @@ export default{
             _sendInstruction(ins, key);
         },
         pushRoute(item, index){
+
             if(this.$store.state.tipSplit){
 
-                this.$store.commit(types.SET_TIP_SPLIT);
                 this.setScreenSystem(index);
                 this.$router.push({path: '/splitScreen'});
 

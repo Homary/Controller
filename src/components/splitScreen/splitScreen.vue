@@ -5,11 +5,8 @@
         <div class="sc-container">
             <div class="sc-top-box">
                 <div class="sc-top-screen">
-                    <screen v-show = "!noneSelect" :screen_id="screen_id"></screen>
-                    <div class="sc-screen-none sc-none-box" v-if = "noneSelect">
-                        <span class="sc-none-single">选择分屏方式</span>
-                    </div>
-                    <saveWindow :win_condition = "win_condition" v-on:win_hidden= "hideWindow"
+                    <screen :screen_id="screen_id"></screen>
+                    <saveWindow :win_condition = "win_condition" v-on:win_hidden= "hideWindow" v-on:win_save="getPlanName"
             class="sc-screen-none"></saveWindow>
                 </div>
                 <div class="sc-top-menu">
@@ -38,7 +35,7 @@
                     </li>
                 </ul>
                 <div class="sc-button-box">
-                    <span @click = "handleSave" class="sc-button-save" v-show="!noneSelect"></span>
+                    <span @click = "handleSave" class="sc-button-save"></span>
                     <span @click="clickGoBack" class="sc-button-back" ></span>
                 </div>
             </div>
@@ -64,10 +61,9 @@ export default{
     data: function() {
         return {
             hover_plan: null,
-            noneSelect: true,
             screenList: [],
             planList: [],
-            win_condition: false,
+            win_condition: '',
             plan_name: '',
             screen_id: '',
             splitId: null, // 存放当前选择的分屏项
@@ -106,7 +102,6 @@ export default{
                 this.setSelectId(this.$store.state.splitId);
             }
 
-            this.noneSelect = false;
 console.log('mounted')
             eventBus.$on('sendInstruction', this._sendScreenInstruction);
             eventBus.$on('toggleScreenMode', this.isSelectSys);
@@ -125,7 +120,6 @@ console.log('mounted')
         if(path.length !== 1){
             next((vm) => {
                 if(vm.$store.state.position){
-                    vm.noneSelect = false; // 标识页面是否已经选择了分屏
                     vm.setSelectSys();
                 }     
             });
@@ -246,8 +240,12 @@ console.log('mounted')
                     }
 
                     // 选择预案, 不发送请求
-                    if( this.$store.state.planData){
-                        return; 
+                    // 没系统
+                    // 防止多次发送同条分屏指令
+
+                    if(data.params.splitId === this.$store.state.cancelSendD || data.params.windows.length === 0 || this.$store.state.planData){
+                        console.log('过滤重复发送指令');
+                        return;
                     }
 
                     sendSwitchScreenIns(data).then((data) => {
@@ -256,12 +254,15 @@ console.log('mounted')
                         }else if(data.errorcode === SUC_CODE){
                             console.log('分屏指令发送成功');
                         }else{
-                            alert('未知错误');
+                            alert(data.msg);
                         }
                     })
 
                     // 选择了系统,下一次选择就是切换
                     this.$store.commit(types.SET_TOGGLE_SYS, true);
+
+                    // 防止多次发送指令
+                    this.$store.commit(types.SET_SEND_DUNBLE, data.params.splitId);
 
                     break;
 
@@ -302,18 +303,21 @@ console.log('切换系统');
             event.preventDefault();
             event.stopPropagation();
 
+            this.$store.commit(types.SET_PLAN_TAG, false);
+
+            this.$store.commit(types.SET_FROM_PLAN, true);
+
             this.addSelectClass(event.currentTarget);
 
             this.sendScreenId(event.currentTarget.getAttribute('name'));
 
             this.setSelectId(event.currentTarget.getAttribute('id'));
 
+            this.clearSelectPlanClass();
         },
 
         // 切换分屏模式时, 系统存在
         isSelectSys(){
-console.log('切换分屏');
-
             let screen_id = this.screen_id,
                 systems = this.$store.state.cur_sys[this.mapTable[screen_id]];
 
@@ -352,7 +356,14 @@ console.log('切换分屏');
             }
             elm.classList.add(_class);
         },
+        clearSelectPlanClass(){
+            let _class = 'sc-screen-plan-select',
+                elms = document.getElementsByClassName(_class);
 
+            for(let i=0, len=elms.length; i<len; i++){
+                elms[i].classList.remove(_class);
+            }
+        },
         setSelectId(id){
             this.splitId = id;
             this.$store.commit(types.SET_SPLIT_ID, id);
@@ -360,25 +371,19 @@ console.log('切换分屏');
         sendScreenId(name){
             this.screen_id = name;
         },
-
         clickGoBack(){
-            this.$router.go(-1);
-            this.$store.commit(types.CLAER_SPLIT_ID);
+            this.$router.push({path: this.$store.state.lastPath});
+            this.$store.commit(types.SET_TIP_SPLIT, false);
         },
 
         handleSave(){
-            this.showSaveWindow();
+            this.showSaveWindow(true);
         },
-        showSaveWindow(){
-            this.win_condition = !this.win_condition;
+        showSaveWindow(boo){
+            this.win_condition = boo;
         },
-        hideWindow(plan_name){
-
-            if(plan_name){
-                this.getPlanName(plan_name);        
-            }
-
-            this.showSaveWindow();
+        hideWindow(boo){
+            this.showSaveWindow(boo);
         },
 
         /**
@@ -419,6 +424,7 @@ console.log('切换分屏');
                 windows 
             })
 
+            this.showSaveWindow(false);
         },
         _savePlan(data){
             savePlan(data).then(res => {
@@ -434,18 +440,16 @@ console.log('切换分屏');
         handleSelectPlan(item){
             let event = window.event || event;
 
+            this.$store.commit(types.SET_TIP_SPLIT, true);
             this.addSelectPlanClass(event.target);
             this.clearPlan();
             this.selectPlan(item);
         },
         clearPlan(){
-console.log('清空')
             this.$store.commit(types.INIT_CUR_SYS);
         },
-
-        // todo bug
         selectPlan(item){
-console.log('触发了')
+
             // 如果不存在list, 就从缓存中取
             if(!this.$store.state.list.length){
                 this.$store.commit(types.FLASE_NAV_LIST);
@@ -469,8 +473,6 @@ console.log('触发了')
                     this.screen_id = this.screenList[i].name;
 
                     this.$store.commit(types.SET_SCREEN_ID, this.screen_id);
-                    
-                    this.noneSelect = false; // 去掉无信号蒙版
                 }
             }
 

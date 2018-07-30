@@ -1,7 +1,6 @@
 <template>
-<div class="sw-container" v-show = "win_condition">
+<div class="sw-container" v-if = "win_condition">
     <h6>保存为预案</h6>
-    <form action="">
     <div class="sw-center">
         <label for="input">预案名称</label>
         <input type="text" id="input" v-model = "plan_name"/>
@@ -10,7 +9,6 @@
         <button class="sw-btn-left" @click = "handleSure">确定</button>
         <button @click = "handleQuit">取消</button>
     </div>
-    </form>
 </div>
 </template>
 
@@ -29,16 +27,13 @@ export default{
             this.submitName();
         },
         handleQuit(){
-            this.$emit('win_hidden');
-        },
-        hideWindow(n){
-            this.$emit('win_hidden', n);
+            this.$emit('win_hidden', false);
         },
         submitName(){
             if(!this.plan_name.trim().length){
                 alert('请填写名称');
             }else{
-                this.hideWindow(this.plan_name);
+                this.$emit('win_save', this.plan_name);
             }
         }
     }

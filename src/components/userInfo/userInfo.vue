@@ -7,12 +7,12 @@
     <div class="user-info-box">
         <span class="ui-home" @click="clickGoHome" v-if="noHome"></span>
         <span class="user-head-img" 
-            :style="{'background-image': 'url(' + userInfo.userIconUrl + ')'}">头像</span>
+            :style="{'background-image': 'url(' + userInfo.userIconUrl + ')'}"></span>
         <span class="point-hover">{{userInfo.userName}}</span>
         <span class="point-hover">修改密码</span>
         <span class="point-hover" @click="handleClickQuit">退出<i class="ui-quit"></i></span>
     </div>
-    <div class="split-icon" @click="$router.push({path: '/splitScreen'})" v-if="noSplit"></div>
+    <div class="split-icon" @click="handleGoSplit" v-if="noSplit"></div>
 </div>
 </template>
 
@@ -49,10 +49,13 @@ console.log('用户ID不存在');
     },
     methods: {
         handleClickQuit(event) {
-            event.stopPropagation();
-            event.preventDefault();
-
             this._quitLogin();
+        },
+        handleGoSplit(){
+            let cur_path = this.$router.history.current.fullPath;
+
+            this.$store.commit(types.SET_LAST_PATH, cur_path);
+            this.$router.push({path: '/splitScreen'});
         },
         _quitLogin() {
             quitLogin().then((data)=>{
@@ -73,7 +76,8 @@ console.log('用户ID不存在');
         },
         clickGoHome(){
             this.$router.push( {path: '/'} );
-            this.$store.commit(types.CLAER_SPLIT_ID);
+            //this.$store.commit(types.CLAER_SPLIT_ID);
+            this.$store.commit(types.SET_TIP_SPLIT, false);
         }
     }
 }
@@ -118,7 +122,8 @@ console.log('用户ID不存在');
             text-align: center;
             line-height: .3rem;
             border-radius: 50%;
-            background-color: #CCC;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
             transform: translateY(-25%);
         }
         .ui-quit{

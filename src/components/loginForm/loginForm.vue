@@ -1,12 +1,13 @@
 <!-- 登录表单 -->
 <template>
-<div class="content">
+<div class="content" v-on:keyup.enter="test">
     <p class="admin-box">
         <i class="admin-logo"></i><span class="admin-indent">&nbsp;管理员</span><span>admin</span>
     </p>
-    <input type="password" class="lf-password" v-model = "u_pass" required="required" />
+    <input type="password" class="lf-password" v-model = "u_pass" required="required" 
+        @keyup.enter="handleLogin"/>
     <div>
-        <button class="lf-button" @click="handleLogin" >登陆</button>
+        <button class="lf-button" @click="handleLogin">登陆</button>
     </div>
 </div>
 </template>
@@ -36,6 +37,10 @@ export default{
         _getLogin: function() {
             let _pass = this.u_pass;
 
+            if(_pass.trim().length === 0){
+                alert('密码不能为空!');
+            }
+
             getLogin(_pass).then((data)=>{
 
                 if(data.errorcode === SUC_CODE){
@@ -53,7 +58,7 @@ export default{
         },
         _setUserInfo: function(userInfo) {
             STORAGE.setStorage(STORAGE.KEY_USER_IFNO, userInfo);
-        }
+        },
     }
 }
 </script>

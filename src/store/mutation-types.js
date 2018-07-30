@@ -14,3 +14,7 @@ export const SET_TIP_SPLIT = 'SET_TIP_SPLIT';
 export const SET_ACTION = 'SET_ACTION';
 export const SET_TOGGLE_SYS = 'SET_TOGGLE_SYS';
 export const INIT_CUR_SYS = 'INIT_CUR_SYS';
+export const SET_PLAN_TAG = 'SET_PLAN_TAG';
+export const SET_FROM_PLAN = 'SET_FROM_PLAN';
+export const SET_SEND_DUNBLE = 'SET_SEND_DUNBLE';
+export const SET_LAST_PATH = 'SET_LAST_PATH';

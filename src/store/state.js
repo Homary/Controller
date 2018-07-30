@@ -1,8 +1,10 @@
 export default {
-    toggleSys: false,
-    tipSplit: false,
+    toggleSys: false, // 标识切换系统
+    tipSplit: false, // 分屏按钮显示
+    cancelSendD: -1, // 标识当前发送的分屏模式ID, 防止连续发送同一个
     firstSendIns: true, // 首次选择系统
     list: [], // 保存列表信息
+    lastPath: '',
     action: null, 
     user: { // 保存用户信息
         id: null,

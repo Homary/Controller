@@ -30,8 +30,7 @@ export function getPlanList() {
 }
 
 export function savePlan(data) {
-console.log('保存预案')
-console.log(data)
+console.log('保存预案');
     return axios.post(URL_SAVE_PLAN, data)
             .then((res) => {
                 return Promise.resolve(res.data);
@@ -46,7 +45,7 @@ export function delPlan(id) {
 }
 
 export function sendInstruction(data) {
-console.log(data)
+console.log(data);
     return axios.post(URL_SEND_INSTRUCTION, data)
             .then(res => {
             console.log(data)

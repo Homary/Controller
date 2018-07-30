@@ -54,11 +54,15 @@ export default {
     },
 
     /**
-     *  保存当前分屏各个窗口数据
+     *  当前选中分屏窗口数据
      */
     [types.SET_WINDOW_DATA] (state, win){
-        state.cur_sys[win.ref][win.position].name = win.data;
-        state.cur_sys[win.ref][win.position].id = win.id;
+
+        // 未选择系统直接返回
+        if(win.id){
+            state.cur_sys[win.ref][win.position].name = win.data;
+            state.cur_sys[win.ref][win.position].id = win.id;
+        }
     },
 
     /**
@@ -80,22 +84,31 @@ export default {
             new_mode = modes.new_mode,
             old_keys = Object.keys(state.cur_sys[modes.old_mode]),
             new_keys = Object.keys(state.cur_sys[modes.new_mode]),
-            len = old_keys.length < new_keys.length ? old_keys.length : new_keys.length;
+            len = old_keys.length,
+            _len = new_keys.length;
 
-        for(let i=0; i<len; i++){
-           state.cur_sys[new_mode][new_keys[i]] = state.cur_sys[old_mode][old_keys[i]];
 
-           let wIndex = state.cur_sys[old_mode][old_keys[i]].wIndex;
-           
-           state.cur_sys[old_mode][old_keys[i]] = { name: '', id: '', wIndex};
-        }
+            for(let i=0; i<_len; i++){
+
+                if(state.cur_sys[old_mode][old_keys[i]]){
+                    state.cur_sys[new_mode][new_keys[i]] = state.cur_sys[old_mode][old_keys[i]];
+                }else{
+                    break;
+                }
+            }
+
+            for(let j=0; j<len; j++){
+                let wIndex = state.cur_sys[old_mode][old_keys[j]].wIndex;
+               
+                state.cur_sys[old_mode][old_keys[j]] = { name: '', id: '', wIndex};
+            }
     },
 
     /**
      *  选中预案, 填入数据
      */
     [types.SET_PLAN_DATA] (state, data){
-
+console.log('填入数据')
         let name = data.name,
             windows = data.windows,
             keys = Object.keys(state.cur_sys[name]),
@@ -105,16 +118,14 @@ export default {
 
             for(let j=0, _len=windows.length; j<_len; j++){
 
-
                 if(keys[i] == windows[j].wid){
 
                     _cur_sys[name][keys[i]].id = windows[j].sysId;
 
                     for(let k=0, _len_=state.list.length; k<_len_; k++){
 
-                        if(state.list[k].id === windows[j].sysId){
+                        if(state.list[k].id === _cur_sys[name][keys[i]].id){
                             _cur_sys[name][keys[i]].name = state.list[k].name;
-
                             break;
                         }
                     }
@@ -142,23 +153,43 @@ export default {
     [types.SET_SPLIT_ID] (state, splitId){
         state.splitId = splitId;
     },
-
     [types.CLAER_SPLIT_ID] (state){
         state.splitId = -1;
     },
 
-    [types.SET_TIP_SPLIT] (state){
-        state.tipSplit = !state.tipSplit;
+    [types.SET_TIP_SPLIT] (state, boo){
+        state.tipSplit = boo;
     },
 
     [types.SET_ACTION] (state, action){
         state.action = action;
     },
 
+    // 当前是否是切换系统
     [types.SET_TOGGLE_SYS] (state, boo){
         state.toggleSys = boo;
     },
 
+    // 是否是选择预案, 是则不用发送分屏指令
+    [types.SET_PLAN_TAG] (state, boo){
+        state.planData = boo;
+    },
+
+    // 是否是来自分屏的切换系统
+    [types.SET_FROM_PLAN] (state, boo){
+        state.fromPlan = boo;
+    },
+
+    // 当前分屏指令ID,防止多次发送同一条指令
+    [types.SET_SEND_DUNBLE](state, id){
+        state.cancelSendD = id;
+    },
+
+    [types.SET_LAST_PATH](state, path){
+        state.lastPath = path;
+    },
+
+    // 重置窗口数据
     [types.INIT_CUR_SYS] (state){
         state.cur_sys = {};
             state.cur_sys = { 

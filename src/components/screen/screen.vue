@@ -418,7 +418,9 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
 
                 // position: 是否有点击信号按钮
                 // 判断refs是否已经存在 
-                if(this.$store.state.position && len.length || this.$store.state.planData){
+                if(this.$store.state.position && len.length || this.$store.state.planData || this.$store.state.fromPlan){
+
+                    this.$store.commit(types.SET_FROM_PLAN, false);
 
                     // 分屏模式的切换, old为空: 路由来自主页
                     //                  不为空: 模式切换
@@ -439,15 +441,17 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                             // 由少屏切换多屏时, 要重新设置screen_id;
                             this.$store.commit(types.SET_SCREEN_ID, newVal);
 
-                        try{
-                            this.$store.commit(types.TOGGLE_SCREEN_DATA, {old_mode, new_mode});
+                        if( !this.$store.state.planData ){
 
-                            // 通知splitScreen
-                            eventBus.$emit('toggleScreenMode');
-                        }catch(error){
-                            console.log(`旧分屏模式 -> %c ${old}`, 'color: #CD3278');
-                        }
-                        
+                            try{
+                                this.$store.commit(types.TOGGLE_SCREEN_DATA, {old_mode, new_mode});
+
+                                // 通知splitScreen
+                                eventBus.$emit('toggleScreenMode');
+                            }catch(error){
+                                console.log(`旧分屏模式 -> %c ${old}`, 'color: #CD3278');
+                            }
+                        }     
                     }
                     
                 }else{
@@ -473,7 +477,11 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
             }
 
             if(this.mapTable[id]){
-                refs[this.mapTable[id]].setAttribute('style', 'display: block');
+                try{
+                    refs[this.mapTable[id]].setAttribute('style', 'display: block');
+                }catch(err){
+                    // 没有选择系统
+                }
             }
         },
         /**
@@ -540,6 +548,8 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                     position = this.getPosition(path);
 
                     this.setCurSelectScreen(position); 
+
+                    this.$store.commit(types.SET_TIP_SPLIT, true);
                     break;
 
                 case 'toggle':
@@ -548,7 +558,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
 
                     this.setCurSelectScreen(position); 
                     this.$store.commit(types.SET_TOGGLE_SYS, true);
-
+                    this.$store.commit(types.SET_TIP_SPLIT, true);
                     eventBus.$emit('toggleSys');
                     break;
 

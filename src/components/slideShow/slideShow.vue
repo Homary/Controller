@@ -12,7 +12,7 @@
         </div>
     </div>
     <i class="right-btn nav-btn" @click = "handleRight"></i>
-    <button @click="$router.go(-1)" class="iw-btn-back"></button>
+    <button @click="handleGoBack" class="iw-btn-back"></button>
 </div>
 </template>
 
@@ -103,7 +103,7 @@ export default{
         goNextMenu(index){
             let params = '';
 
-            if(this.list_show[index].subSystem){
+            if(this.list_show[index].subSystem && this.list_show[index].subSystem.length > 0){
 
                 this.indexs.push(index);
                 for(let i=0, len=this.indexs.length; i<len; i++){
@@ -143,6 +143,16 @@ console.log('最后一级菜单')
             for(let i=0, len=items.length; i<len; i++){
                 items[i].style.transition = 'all .5s';
                 items[i].style.left = -7*this.count + 'rem';
+            }
+        },
+        handleGoBack(){
+            let cur_path = this.$router.history.current.fullPath;
+            let last_path = cur_path.split('').splice(0, cur_path.length-2).join('');
+            
+            if(last_path === '/subList'){
+                this.$router.push({path: '/'});
+            }else{
+                this.$router.push({path: last_path});
             }
         }
     }
