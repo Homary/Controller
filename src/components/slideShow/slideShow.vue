@@ -45,12 +45,19 @@ export default{
 
             let _indexs = Array.from(this.indexs);
             let _l = _indexs.shift();
-
+console.log(_l)
             // 如果不存在list, 就从缓存中取
             if(!this.$store.state.list.length){
                 this.$store.commit(types.FLASE_NAV_LIST);
             }
-            this.list_show = this.$store.state.list[_l].subSystem;
+
+            for(let _i=0, _len=this.$store.state.list.length; _i<_len; _i++){
+                if(this.$store.state.list[_i].id === _l){
+                    this.list_show = this.$store.state.list[_l].subSystem;
+
+                    break;
+                } 
+            }
 
             while(_indexs.length){
                 let l = _indexs.shift();

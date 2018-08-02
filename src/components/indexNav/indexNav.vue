@@ -5,7 +5,7 @@
     <div class="in-screen">
         <div class="item-box" v-for="item in sysList">
             <span class="nav-item" 
-                @click="handleClick(sub_item, index)"
+                @click="handleClick(sub_item, sub_item.id)"
                 v-for="(sub_item, index) in item"  :key="sub_item.id"
                 :style="{'background-image': 'url('+ sub_item.iconUrl +')'}">
                 {{sub_item.name}}
@@ -79,8 +79,6 @@ export default{
 
                 let _screens = Array.from(this.$store.state.screen.windows),
                     position = this.$store.state.position;
-
-                sysId = this.$store.state.list[sysId].id; // 将索引转为id
 
                 for(let i=0, len = _screens.length; i<len; i++){
 
