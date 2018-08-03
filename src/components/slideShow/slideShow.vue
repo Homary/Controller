@@ -45,7 +45,7 @@ export default{
 
             let _indexs = Array.from(this.indexs);
             let _l = _indexs.shift();
-console.log(_l)
+
             // 如果不存在list, 就从缓存中取
             if(!this.$store.state.list.length){
                 this.$store.commit(types.FLASE_NAV_LIST);

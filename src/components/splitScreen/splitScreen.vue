@@ -529,13 +529,27 @@ console.log('切换系统');
 
 <style rel="stylesheet/less" lang="less" scoped>
 
-
 // 屏幕高度 < 800px;
-@media only screen and (max-height: 700px){
+@media only screen and (max-height: 800px){
     .sc-top-box{
         height: 3.2rem !important;
         .sc-menu-contain{
             height: 3rem !important;
+            box-sizing: border-box;
+            .sc-menu-item-box{
+                display: flex;
+                height: .3rem !important;
+                line-height: .3rem !important;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1400px){
+    .sc-top-box{
+        height: 3rem !important;
+        .sc-menu-contain{
+            height: 2.7rem !important;
             box-sizing: border-box;
             .sc-menu-item-box{
                 display: flex;
