@@ -85,13 +85,20 @@ export default {
             old_keys = Object.keys(state.cur_sys[modes.old_mode]),
             new_keys = Object.keys(state.cur_sys[modes.new_mode]),
             len = old_keys.length,
-            _len = new_keys.length;
+            _len = new_keys.length,
+            _systems = [];
 
+            for(let k=0; k<len; k++){
+                if(state.cur_sys[old_mode][old_keys[k]] && state.cur_sys[old_mode][old_keys[k]].id !== -1){
+                    _systems.push(state.cur_sys[old_mode][old_keys[k]]);
+                }
+            }
 
             for(let i=0; i<_len; i++){
 
-                if(state.cur_sys[old_mode][old_keys[i]]){
-                    state.cur_sys[new_mode][new_keys[i]] = state.cur_sys[old_mode][old_keys[i]];
+                if(_systems[i]){
+                    state.cur_sys[new_mode][new_keys[i]].id = _systems[i].id;
+                    state.cur_sys[new_mode][new_keys[i]].name = _systems[i].name;
                 }else{
                     break;
                 }
@@ -100,7 +107,7 @@ export default {
             for(let j=0; j<len; j++){
                 let wIndex = state.cur_sys[old_mode][old_keys[j]].wIndex;
                
-                state.cur_sys[old_mode][old_keys[j]] = { name: '', id: '', wIndex};
+                state.cur_sys[old_mode][old_keys[j]] = { name: '', id: -1, wIndex};
             }
     },
 
