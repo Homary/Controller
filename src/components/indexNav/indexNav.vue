@@ -36,12 +36,12 @@ export default{
         this._getSysList();
     },
     methods: {
-        handleClick(item, index){
+        handleClick: function(item, index){
             let event = window.event || event;
 
             this.pushRoute(item, index);
         },
-        sendInstruction(item){
+        sendInstruction: function(item){
             let ins = item.instruction,
                 key = item.routingkey;
 
@@ -51,7 +51,7 @@ export default{
             }
             _sendInstruction(ins, key);
         },
-        pushRoute(item, index){
+        pushRoute: function(item, index){
 
             if(this.$store.state.tipSplit){
 
@@ -59,7 +59,7 @@ export default{
                 this.$router.push({path: '/splitScreen'});
 
             }else{
-                this.$router.push({path: `/subList/${index}`});
+                this.$router.push({path: '/subList/' + index});
 
                 // 发送指令
                 this.sendInstruction(item);
@@ -70,7 +70,7 @@ export default{
          * 设置窗口系统 -> 将主页选择的系统展示到分屏上
          * @param {num} sysId 系统ID
          */
-        setScreenSystem(sysId){
+        setScreenSystem: function(sysId){
 
             /**
              * 如果存在 screenId 说明页面是由分屏页面选择系统跳转过来的
@@ -85,21 +85,21 @@ export default{
                     if(_screens[i].position === position){
 
                         // 设置当前选中窗口的信息 i: windows中的索引, sysId: 系统id
-                        this.$store.commit(types.SET_SYS_ID, {i, sysId});
+                        this.$store.commit(types.SET_SYS_ID, {i: i, sysId: sysId});
                     }
                 }
             }
         },
 
-        handleRight() {
+        handleRight: function() {
             this.count++;
             this.moveItem();
         },
-        handleLeft() {
+        handleLeft: function() {
             this.count--;
             this.moveItem();
         },
-        moveItem() {
+        moveItem: function() {
             let items = document.getElementsByClassName('item-box'),
                 refLength = this.sysList.length;
 
@@ -115,11 +115,13 @@ export default{
             }
         },
 
-        _getSysList(){
-            getSysList().then((res) => {
+        _getSysList: function(){
+            let self = this;
+
+            getSysList().then(function(res) {
                 let _arr = Array.from(res.data);
 
-                this._saveSysList(_arr);
+                self._saveSysList(_arr);
 
                 if(res.errorcode === SUC_CODE){
                     let data = res.data,
@@ -129,14 +131,14 @@ export default{
                     while(data.length){
                         arr.push(data.splice(0, 4))
                     }
-                this.sysList = arr;
+                self.sysList = arr;
 
                 }else if(res.errorcode === ERR_GET_SYSTEM_INFO){
                     alert(res.msg)
                 }
             })
         },
-        _saveSysList(data){
+        _saveSysList: function(data){
             this.$store.commit(types.SET_SYSTEM_LIST, data);
         }
     }
@@ -153,6 +155,8 @@ export default{
         width: .5rem;
         height: .5rem;
         background-repeat: no-repeat;
+
+        cursor: pointer;
         &:hover{
             background-size: 50%, 50%;
         }
@@ -181,15 +185,15 @@ export default{
             //transition: all .5s;
             .nav-item{
                 width: 1.75rem;
-                height: 1.3rem;
-                margin-top: -.1rem;
+                height: 1.7rem;
                 font-size: .15rem;
                 text-align: center;
                 text-decoration: none !important;
-                line-height: 15;
-                background-size: .825rem .8rem;
+                line-height: 17;
+                background-size: .825rem .7rem;
                 background-repeat: no-repeat;
-                background-position: 50% 40%;
+                background-position: 50% 35%;
+                cursor: pointer;
             }
             span{
                 text-decoration: none !important;

@@ -18,12 +18,12 @@ export default{
         bgCanvas,
         indexNav
     },
-    beforeRouteLeave(to, from, next){
+    beforeRouteLeave: function(to, from, next){
         eventBus.$emit('indexRouteChange', true);
         eventBus.$emit('parentRouteChange', true);
         next();
     },
-    beforeRouteEnter(to, from, next){
+    beforeRouteEnter: function(to, from, next){
         eventBus.$emit('indexRouteChange', false);
         next();
     }

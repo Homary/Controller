@@ -9,14 +9,14 @@ const SERVER = require('./webpack.server.js');
 
 const config = {
     entry: {
-        login: './src/pages/login/login.js',
-        index: './src/pages/index/index.js'
+        login: ['babel-polyfill', './src/pages/login/login.js'],
+        index: ['babel-polyfill', './src/pages/index/index.js']
     },
     output: {
         path: path.join(__dirname, '/build/'),
         filename: 'js/[name].js',
     },
-    devtool: 'eval-source-map',
+    //devtool: 'eval-source-map',
     devServer: SERVER,
     module: {
         rules: [

@@ -17,8 +17,8 @@ export default{
         }
     },
     components: {
-        loginForm,
-        copyFooter
+        loginForm: loginForm, 
+        copyFooter: copyFooter
     }
 }
 </script>

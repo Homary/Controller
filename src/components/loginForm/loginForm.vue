@@ -7,7 +7,7 @@
     <input type="password" class="lf-password" v-model = "u_pass" required="required" 
         @keyup.enter="handleLogin"/>
     <div>
-        <button class="lf-button" @click="handleLogin">登陆</button>
+        <button class="lf-button" @click="handleLogin">登录</button>
     </div>
 </div>
 </template>
@@ -36,16 +36,17 @@ export default{
         },
         _getLogin: function() {
             let _pass = this.u_pass;
+            let self = this;
 
             if(_pass.trim().length === 0){
                 alert('密码不能为空!');
             }
 
-            getLogin(_pass).then((data)=>{
+            getLogin(_pass).then(function(data){
 
                 if(data.errorcode === SUC_CODE){
 
-                    this._setUserInfo(data.data);
+                    self._setUserInfo(data.data);
                     window.location.href = 'index.html';
                 }else if(data.errorcode === ERR_LOGIN_ERR){
 

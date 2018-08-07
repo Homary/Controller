@@ -32,7 +32,7 @@ export default{
         this._timer = setInterval(this.loop, 1000 / 60);
     },
     methods: {
-        init() {
+        init: function() {
             this.container = document.createElement( 'div' );
             this.container.style.position = "absolute";
             this.container.style.left = "-20px";
@@ -74,13 +74,13 @@ export default{
             this.container.appendChild( this.renderer.domElement );
 
             document.addEventListener( 'mousemove', this.onDocumentMouseMove, false );
-            document.addEventListener( 'touchstart', this.onDocumentTouchStart, false );
-            document.addEventListener( 'touchmove', this.onDocumentTouchMove, false );
+            //document.addEventListener( 'touchstart', this.onDocumentTouchStart, false );
+            //document.addEventListener( 'touchmove', this.onDocumentTouchMove, false );
             window.addEventListener( 'resize', this.onWindowResize, false );
 
             eventBus.$on('parentRouteChange', this.handleEventBus);
         },
-        handleEventBus(boo){
+        handleEventBus: function(boo){
             clearInterval(this._timer);
             
             if(this.container){
@@ -90,18 +90,18 @@ export default{
 
             return;
         },
-        onWindowResize() {
+        onWindowResize: function() {
             let SCREEN_WIDTH = window.innerWidth,
                 SCREEN_HEIGHT = window.innerHeight;
 
             this.renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT/5*3);
         },
         //
-        onDocumentMouseMove( event ) {
+        onDocumentMouseMove: function( event ) {
             this.mouseX = event.clientX - this.windowHalfX;
             //this.mouseY = event.clientY - this.windowHalfY;
         },
-        onDocumentTouchStart( event ) {
+        onDocumentTouchStart: function( event ) {
 
             if ( event.touches.length == 1 ) {
                 event.preventDefault();
@@ -110,7 +110,7 @@ export default{
                 //this.mouseY = event.touches[ 0 ].pageY - this.windowHalfY;
             }
         },
-        onDocumentTouchMove( event ) {
+        onDocumentTouchMove: function( event ) {
 
             if ( event.touches.length == 1 ) {
 
@@ -122,7 +122,7 @@ export default{
             }
         },
         //
-        loop() {
+        loop: function() {
             this.camera.position.x += ( this.mouseX - this.camera.position.x ) * .05;
             this.camera.position.y += ( - this.mouseY - this.camera.position.y ) * .05;
 

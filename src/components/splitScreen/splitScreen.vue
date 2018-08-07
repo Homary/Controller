@@ -530,7 +530,22 @@ console.log('切换系统');
 <style rel="stylesheet/less" lang="less" scoped>
 
 // 屏幕高度 < 800px;
-@media only screen and (max-height: 800px){
+@media only screen and (max-width: 1100px){
+    .sc-top-box{
+        height: 5rem !important;
+        .sc-menu-contain{
+            height: 3rem !important;
+            box-sizing: border-box;
+            .sc-menu-item-box{
+                display: flex;
+                height: .3rem !important;
+                line-height: .3rem !important;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 1100px){
     .sc-top-box{
         height: 3.2rem !important;
         .sc-menu-contain{
@@ -538,51 +553,6 @@ console.log('切换系统');
             box-sizing: border-box;
             .sc-menu-item-box{
                 display: flex;
-                height: .3rem !important;
-                line-height: .3rem !important;
-            }
-        }
-    }
-}
-
-@media only screen and (max-width: 1400px){
-    .sc-top-box{
-        height: 3rem !important;
-        .sc-menu-contain{
-            height: 2.7rem !important;
-            box-sizing: border-box;
-            .sc-menu-item-box{
-                display: flex;
-                height: .3rem !important;
-                line-height: .3rem !important;
-            }
-        }
-    }
-}
-
-@media only screen and (max-height: 1000px) and (min-width: 1400px){
-    .sc-top-box{
-        height: 4rem !important;
-        .sc-menu-contain{
-            height: 3.5rem !important;
-            box-sizing: border-box;
-            .sc-menu-item-box{
-                display: flex;
-                height: .3rem !important;
-                line-height: .3rem !important;
-            }
-        }
-    }
-}
-
-// 屏幕宽度 > 1700px;
-@media only screen and (min-width: 1700px) {
-    .sc-top-box{
-        height: 3.5rem !important;
-        .sc-menu-contain{
-            height: 3rem !important;
-            box-sizing: border-box;
-            .sc-menu-item-box{
                 height: .3rem !important;
                 line-height: .3rem !important;
             }
@@ -735,9 +705,11 @@ console.log('切换系统');
 
             /* 底部列表选中样式 */
             .sc-screen-list-select{
+                padding-bottom: .555rem;
                 background-image: url('选中底图.png');
                 background-size: 100% 100%;
                 background-repeat: no-repeat;
+                background-position: 50% 70%;
             }
         }
         .sc-button-box{

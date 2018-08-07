@@ -30,7 +30,7 @@ export default{
             indexs: []
         }
     },
-    beforeMount(){
+    beforeMount: function(){
         this.indexs = this.setPath(this.$router.history.current.path);
         this.initData();
     },
@@ -41,7 +41,7 @@ export default{
         }
     },
     methods: {
-        initData(){
+        initData: function(){
 
             let _indexs = Array.from(this.indexs);
             let _l = _indexs.shift();
@@ -89,7 +89,7 @@ export default{
          * @param {String} path 路径
          * 'subList/0/0 -> [0, 0]'
          */
-        setPath(path){
+        setPath: function(path){
 
             let _arr = path.split('/');
          
@@ -101,13 +101,13 @@ export default{
 
             return _arr;
         },
-        handleClick(index, item){
+        handleClick: function(index, item){
 
             this.goNextMenu(index);
 
             this.sendInstruction(item);
         },
-        goNextMenu(index){
+        goNextMenu: function(index){
             let params = '';
 
             if(this.list_show[index].subSystem && this.list_show[index].subSystem.length > 0){
@@ -115,15 +115,15 @@ export default{
                 this.indexs.push(index);
                 for(let i=0, len=this.indexs.length; i<len; i++){
 
-                    params += `/${this.indexs[i]}`;
+                    params = params + '/' + this.indexs[i];
                 }
-                this.$router.push({path: `/subList${params}`});
+                this.$router.push({path: '/subList' + params});
             }else{
 console.log('最后一级菜单')
                 // 最后一级菜单
             }
         },
-        sendInstruction(item){
+        sendInstruction: function(item){
             let ins = item.instruction,
                 key = item.routingkey;
 
@@ -152,7 +152,7 @@ console.log('最后一级菜单')
                 items[i].style.left = -7*this.count + 'rem';
             }
         },
-        handleGoBack(){
+        handleGoBack: function(){
             let cur_path = this.$router.history.current.fullPath;
             let last_path = cur_path.split('').splice(0, cur_path.length-2).join('');
             
@@ -246,7 +246,7 @@ console.log('最后一级菜单')
                 color: #DDD;
                 text-align: center;
                 text-decoration: none !important;
-                line-height: 15;
+                line-height: 16.5;
                 background-size: .7rem .7rem;
                 background-repeat: no-repeat;
                 background-position: 50% 40%;

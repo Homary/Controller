@@ -10,7 +10,10 @@
             :style="{'background-image': 'url(' + userInfo.userIconUrl + ')'}"></span>
         <span class="point-hover">{{userInfo.userName}}</span>
         <span class="point-hover">修改密码</span>
-        <span class="point-hover" @click="handleClickQuit">退出<i class="ui-quit"></i></span>
+        <div class="point-hover">
+            <span  @click="handleClickQuit">退出</span>
+            <i class="ui-quit"></i>
+        </div>
     </div>
     <div class="split-icon" @click="handleGoSplit" v-if="noSplit"></div>
 </div>
@@ -48,17 +51,17 @@ console.log('用户ID不存在');
         eventBus.$on('splitRouteChange', this.showSplitIcon);
     },
     methods: {
-        handleClickQuit(event) {
+        handleClickQuit: function(event) {
             this._quitLogin();
         },
-        handleGoSplit(){
+        handleGoSplit: function(){
             let cur_path = this.$router.history.current.fullPath;
 
             this.$store.commit(types.SET_LAST_PATH, cur_path);
             this.$router.push({path: '/splitScreen'});
         },
-        _quitLogin() {
-            quitLogin().then((data)=>{
+        _quitLogin: function() {
+            quitLogin().then(function(data) {
                 if(data.errorcode === SUC_CODE){
                     STORAGE.clearStorage();
                     alert('退出成功');
@@ -68,13 +71,13 @@ console.log('用户ID不存在');
                 }
             })
         },
-        showHomeIcon(boo){
+        showHomeIcon: function(boo){
             this.noHome = boo;
         },
-        showSplitIcon(boo){
+        showSplitIcon: function(boo){
             this.noSplit = boo;
         },
-        clickGoHome(){
+        clickGoHome: function(){
             this.$router.push( {path: '/'} );
             //this.$store.commit(types.CLAER_SPLIT_ID);
             this.$store.commit(types.SET_TIP_SPLIT, false);
@@ -112,30 +115,33 @@ console.log('用户ID不存在');
     }
     .user-info-box{
         display: flex;
+        align-items: center;
+        height: 100%;
         font-family: '微软雅黑';
         font-size: .11rem;
         color: rgba(255, 255, 255, .7);
         .user-head-img{
-            width: .3rem;
-            height: .3rem;
+            width: .2rem;
+            height: .2rem;
             margin-right: 10px;
             text-align: center;
             line-height: .3rem;
             border-radius: 50%;
             background-size: 100% 100%;
             background-repeat: no-repeat;
-            transform: translateY(-25%);
         }
         .ui-quit{
             display: inline-block;
             width: 13px;
             height: 13px;
-            margin-left: 3px;
             background-image: url('quit.png');
             background-size: 100% 100%;
+            transform: translateY(15%);
         }
         .point-hover{
             display: inline-block;
+            height: 30px;
+            line-height: 30px;
             padding-right: .2rem;
             cursor: pointer;
         }

@@ -23,13 +23,13 @@ export default{
         }
     },
     methods: {
-        handleSure(){
+        handleSure: function(){
             this.submitName();
         },
-        handleQuit(){
+        handleQuit: function(){
             this.$emit('win_hidden', false);
         },
-        submitName(){
+        submitName: function(){
             if(!this.plan_name.trim().length){
                 alert('请填写名称');
             }else{

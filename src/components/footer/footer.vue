@@ -2,7 +2,7 @@
 <template>
 <div>
     <div class="copy-footer">
-        Copyright © 2011 高新兴科技集团股份有限公司  版权所有
+        Copyright © 高新兴科技集团股份有限公司  版权所有
     </div>
 </div>
 </template>

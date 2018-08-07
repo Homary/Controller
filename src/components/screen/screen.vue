@@ -7,8 +7,8 @@
                 <button @click="handleClick('select')" @tap="handleClick('select')" v-show="$store.state.cur_sys['fullScreen']['screen-center']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['fullScreen']['screen-center']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['fullScreen']['screen-center']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
         </div>
@@ -19,16 +19,16 @@
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen1x2']['screen-left']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen1x2']['screen-left']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen1x2']['screen-left']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-right screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen1x2']['screen-right']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen1x2']['screen-right']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen1x2']['screen-right']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
         </div>
@@ -39,24 +39,24 @@
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen1x3']['screen-left']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen1x3']['screen-left']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen1x3']['screen-left']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-center screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen1x3']['screen-center']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen1x3']['screen-center']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen1x3']['screen-center']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-right screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen1x3']['screen-right']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen1x3']['screen-right']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen1x3']['screen-right']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
         </div>
@@ -67,32 +67,32 @@
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen2x2']['screen-top-left']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen2x2']['screen-top-left']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen2x2']['screen-top-left']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-top-right screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen2x2']['screen-top-right']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen2x2']['screen-top-right']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen2x2']['screen-top-right']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-bottom-left screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen2x2']['screen-bottom-left']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen2x2']['screen-bottom-left']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen2x2']['screen-bottom-left']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-bottom-right screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen2x2']['screen-bottom-right']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen2x2']['screen-bottom-right']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen2x2']['screen-bottom-right']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
         </div>
@@ -103,48 +103,48 @@
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen2x3']['screen-top-left']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen2x3']['screen-top-left']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen2x3']['screen-top-left']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-top-center screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen2x3']['screen-top-center']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen2x3']['screen-top-center']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen2x3']['screen-top-center']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-top-right screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen2x3']['screen-top-right']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen2x3']['screen-top-right']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen2x3']['screen-top-right']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-bottom-left screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen2x3']['screen-bottom-left']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen2x3']['screen-bottom-left']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen2x3']['screen-bottom-left']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-bottom-center screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen2x3']['screen-bottom-center']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen2x3']['screen-bottom-center']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen2x3']['screen-bottom-center']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>       
             </div>
             <div class="screen-bottom-right screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen2x3']['screen-bottom-right']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen2x3']['screen-bottom-right']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen2x3']['screen-bottom-right']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
         </div>
@@ -155,72 +155,72 @@
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen3x3']['screen-top-left']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen3x3']['screen-top-left']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen3x3']['screen-top-left']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-top-center screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen3x3']['screen-top-center']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen3x3']['screen-top-center']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen3x3']['screen-top-center']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-top-right screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen3x3']['screen-top-right']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen3x3']['screen-top-right']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen3x3']['screen-top-right']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-center-left screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen3x3']['screen-center-left']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen3x3']['screen-center-left']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen3x3']['screen-center-left']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-center-center screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen3x3']['screen-center-center']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen3x3']['screen-center-center']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen3x3']['screen-center-center']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>       
             </div>
             <div class="screen-center-right screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen3x3']['screen-center-right']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen3x3']['screen-center-right']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen3x3']['screen-center-right']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-bottom-left screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen3x3']['screen-bottom-left']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen3x3']['screen-bottom-left']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen3x3']['screen-bottom-left']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-bottom-center screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen3x3']['screen-bottom-center']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen3x3']['screen-bottom-center']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen3x3']['screen-bottom-center']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>       
             </div>
             <div class="screen-bottom-right screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen3x3']['screen-bottom-right']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen3x3']['screen-bottom-right']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen3x3']['screen-bottom-right']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
         </div>
@@ -231,128 +231,128 @@
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['one-one']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['one-one']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['one-one']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="one-two screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['one-two']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['one-two']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['one-two']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="one-three screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['one-three']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['one-three']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['one-three']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="one-four screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['one-four']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['one-four']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['one-four']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="two-one screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['two-one']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['two-one']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['two-one']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="two-two screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['two-two']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['two-two']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['two-two']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="two-three screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['two-three']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['two-three']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['two-three']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="two-four screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['two-four']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['two-four']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['two-four']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="three-one screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['three-one']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['three-one']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['three-one']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="three-two screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['three-two']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['three-two']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['three-two']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="three-three screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['three-three']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['three-three']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['three-three']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="three-four screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['three-four']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['three-four']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['three-four']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="four-one screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['four-one']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['four-one']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['four-one']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="four-two screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['four-two']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['four-two']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['four-two']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="four-three screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['four-three']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['four-three']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['four-three']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="four-four screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['screen4x4']['four-four']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['screen4x4']['four-four']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['screen4x4']['four-four']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
         </div>
@@ -363,16 +363,16 @@
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['diy']['screen-left']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['diy']['screen-left']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['diy']['screen-left']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
             <div class="screen-right screen-size">
                 <button @click="handleClick('select')" v-show="$store.state.cur_sys['diy']['screen-right']['name'].length === 0" class="none-single-button">无信号</button>
                 <div class="screen-system-show" v-show="$store.state.cur_sys['diy']['screen-right']['name'].length !== 0">
                     <h5>{{$store.state.cur_sys['diy']['screen-right']['name']}}</h5>
-                    <button class="sc-button-toggle" @click="handleClick('toggle')">切换系统</button>
-                    <button class="sc-button-clear" @click="handleClick('clear')">清空</button>
+                    <button class="sc-button-toggle" @click="handleClick('toggle')"></button>
+                    <button class="sc-button-clear" @click="handleClick('clear')"></button>
                 </div>
             </div>
         </div>
@@ -469,7 +469,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
          * @param  {string} id 分屏选项
          * @return {[type]}    通过mapTable映射找到对应的DOM节点
          */
-        showScreen(id){
+        showScreen: function(id){
             let refs = this.$refs;
 
             for(let key in refs){
@@ -488,7 +488,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
          * 保存当前小窗口的系统名称
          * @param {string} screen_id 当前选中的分屏模式
          */
-        setWindowData(screen_id){
+        setWindowData: function(screen_id){
 
             let refs = this.$refs,
                 childs,
@@ -536,7 +536,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
          * 组件中点击事件的总代理
          * @param  {string} type 标识不同的按钮点击选项
          */
-        handleClick(type){
+        handleClick: function(type){
 
             let path,
                 position,
@@ -579,7 +579,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
          * 将当前小窗口的位置发送给主页
          * @param {string} position 小窗口的位置
          */
-        setCurSelectScreen(position){
+        setCurSelectScreen: function(position){
 
             let screenId = this.screen_id,
                 wIndex = this.$store.state.cur_sys[this.mapTable[this.screen_id]][position].wIndex; // 窗口编号从0开始
@@ -591,7 +591,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
          * 获取节点位置
          * @param  {dom} elm 父节点
          */
-        getPosition(elm){
+        getPosition: function(elm){
             elm.classList.remove('screen-size');
 
             let position = elm.className;
@@ -604,11 +604,11 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
          * @param  {string} screen_id 分屏模式
          * @param  {string} position   窗口位置
          */
-        clearCurSystem(screen_id, position){
+        clearCurSystem: function(screen_id, position){
             this.$store.commit(types.CLEAR_CUR_SYS, {screen_id, position});
         },
 
-        _clearWindow(screen_id, position){
+        _clearWindow: function(screen_id, position){
 console.log('关闭指令');
             let wIndex = this.$store.state.cur_sys[screen_id][position].wIndex,
                 splitId = this.$store.state.splitId,
@@ -645,6 +645,7 @@ console.log('关闭指令');
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            font-size: .13rem;
             background-color: rgba(9, 16, 43, .7);
             button{
                 color: #EEE;
@@ -676,41 +677,24 @@ console.log('关闭指令');
                     color: #EEE;
                 }
                 .sc-button-toggle{
-                    color: #333;
-                    background-color: #EEE;
+                    width: .8rem;
+                    height: .25rem;
+                    margin-left: -10px;
+                    background-image: url('切换系统.png');
+                    background-repeat: no-repeat;
+                    background-size: 100% 100%;
+                    background-position: 50% 50%;
                     border-radius: 5px;
-                    margin-right: .1rem;
-
-                    &:before{
-                        content: '';
-                        display: inline-block;
-                        width: .1rem;
-                        height: .1rem;
-                        margin-right: 5px;
-                        padding: 5px;
-                        line-height: .1rem;
-                        background-image: url('change.png');
-                        background-size: 100% 100%;
-                        background-repeat: no-repeat;
-                    }
                 }
-                .sc-button-clear{
-                    color: #333;
-                    background-color: #EEE;
-                    border-radius: 5px;
-
-                    &:before{
-                        content: '';
-                        display: inline-block;
-                        width: .1rem;
-                        height: .1rem;
-                        margin-right: 5px;
-                        padding: 5px;
-                        line-height: .1rem;
-                        background-image: url('clear.png');
-                        background-size: 100% 100%;
-                        background-repeat: no-repeat;
-                    }
+                .sc-button-clear{                    
+                    width: .5rem;
+                    height: .25rem;
+                    margin-left: 10px;
+                    background-image: url('清屏.png');
+                    background-repeat: no-repeat;
+                    background-size: 100% 100%;
+                    background-position: 50% 50%;
+                    border-radius: 3px;
                 }
             }
         }
@@ -767,7 +751,7 @@ console.log('关闭指令');
             box-sizing: border-box;
             .screen-size{
                 flex: 1 1 48%;
-                height: 50%;
+                height: 49%;
                 box-sizing: border-box;
             }
             .screen-top-left, .screen-bottom-left{
@@ -788,7 +772,7 @@ console.log('关闭指令');
             box-sizing: border-box;
             .screen-size{
                 flex: 1 1 30%;
-                height: 50%;
+                height: 49%;
             }
             .screen-top-left, .screen-top-center, .screen-bottom-left, .screen-bottom-center{
                 margin-right: 10px;
@@ -807,8 +791,8 @@ console.log('关闭指令');
             height: 100%;
             box-sizing: border-box;
             .screen-size{
-                flex: 1 1 30%;
-                height: 33.33%;
+                flex: 1 1 31%;
+                height: 32%;
                 box-sizing: border-box;
             }
             .screen-top-left, .screen-top-center, .screen-center-left, .screen-center-center, .screen-bottom-left, .screen-bottom-center{
@@ -828,9 +812,12 @@ console.log('关闭指令');
             width: 100%;
             height: 100%;
             box-sizing: border-box;
+            .screen-system-show{
+                transform: scale(.7);
+            }
             .screen-size{
                 flex: 1 1 23%;
-                height: 24%;
+                height: 23.5%;
                 box-sizing: border-box;
             }
             .one-one, .one-two, .one-three, .two-one, .two-two, .two-three, .three-one, .three-two, .three-three, .four-one, .four-two, .four-three{

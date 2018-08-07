@@ -5,9 +5,6 @@
   "main": "index.js",
   "browserslist": [
     "defaults",
-    "not ie < 10",
-    "last 2 versions",
-    "> 1%",
     "iOS 7",
     "last 3 iOS versions"
   ],
@@ -26,6 +23,7 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-latest": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
@@ -43,6 +41,6 @@
     "vue-style-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.11.2"
+    "webpack-dev-server": "^2.5.1"
   }
 }
