@@ -1,18 +1,20 @@
 <!-- 顶部用户信息 -->
 <template>
-<div class="ui-container">
-    <div class="ui-header">
-        <span class="ui-head-en">GOCC </span><span class="ui-head-ch">智慧城市操控中心</span>
-    </div>
-    <div class="user-info-box">
-        <span class="ui-home" @click="clickGoHome" v-if="noHome"></span>
-        <span class="user-head-img" 
-            :style="{'background-image': 'url(' + userInfo.userIconUrl + ')'}"></span>
-        <span class="point-hover">{{userInfo.userName}}</span>
-        <span class="point-hover">修改密码</span>
-        <div class="point-hover">
-            <span  @click="handleClickQuit">退出</span>
-            <i class="ui-quit"></i>
+<div class="ui-wrapper">
+    <div class="ui-container">
+        <div class="ui-header">
+            <span class="ui-head-en">GOCC </span><span class="ui-head-ch">智慧城市操控中心</span>
+        </div>
+        <div class="user-info-box">
+            <span class="ui-home" @click="clickGoHome" v-if="noHome"></span>
+            <span class="user-head-img" 
+                :style="{'background-image': 'url(' + userInfo.userIconUrl + ')'}"></span>
+            <span class="point-hover">{{userInfo.userName}}</span>
+            <span class="point-hover">修改密码</span>
+            <div class="point-hover">
+                <span  @click="handleClickQuit">退出</span>
+                <i class="ui-quit"></i>
+            </div>
         </div>
     </div>
     <div class="split-icon" @click="handleGoSplit" v-if="noSplit"></div>
@@ -86,6 +88,23 @@ console.log('用户ID不存在');
 }
 </script>
 <style rel="stylesheet/less" lang="less" scoped>
+.ui-wrapper{
+    width: 100%;
+    .split-icon{
+        position: fixed;
+        top: 1rem;
+        right: .5rem;
+        width: .5rem;
+        height: .5rem;
+        background-image: url('分屏浮标按钮.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        border-radius: 50%;
+        &:hover{
+            box-shadow: 0 0 10px #EEE;
+        }
+    }
+}
 .ui-container{
     display: flex;
     justify-content: space-between;
@@ -144,20 +163,6 @@ console.log('用户ID不存在');
             line-height: 30px;
             padding-right: .2rem;
             cursor: pointer;
-        }
-    }
-    .split-icon{
-        position: fixed;
-        top: 1rem;
-        right: .5rem;
-        width: .5rem;
-        height: .5rem;
-        background-image: url('分屏浮标按钮.png');
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-        border-radius: 50%;
-        &:hover{
-            box-shadow: 0 0 10px #EEE;
         }
     }
 }

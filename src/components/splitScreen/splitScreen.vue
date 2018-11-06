@@ -79,7 +79,7 @@ export default{
             }
         }
     },
-    mounted(){
+    mounted: function(){
 
         // 主页以及分屏图标
         eventBus.$emit('splitRouteChange', false);
@@ -88,28 +88,30 @@ export default{
         this._getScreenList();
         this._getPlanList();
 
-        this.$nextTick(() => {
+        let self = this;
 
-            if( !this.$store.state.position ){
+        this.$nextTick(function() {
+
+            if( !self.$store.state.position ){
 
                 // 初始化为全屏模式
-                this.sendScreenId('全屏');
+                self.sendScreenId('全屏');
 
-                this.setSelectId('1');
+                self.setSelectId('1');
             }else{
-                this.sendScreenId(this.$store.state.screen.screenId);
+                self.sendScreenId(self.$store.state.screen.screenId);
 
-                this.setSelectId(this.$store.state.splitId);
+                self.setSelectId(self.$store.state.splitId);
             }
 
 console.log('mounted')
-            eventBus.$on('sendInstruction', this._sendScreenInstruction);
-            eventBus.$on('toggleScreenMode', this.isSelectSys);
-            eventBus.$on('toggleSys', this.isToggleSys);
+            eventBus.$on('sendInstruction', self._sendScreenInstruction);
+            eventBus.$on('toggleScreenMode', self.isSelectSys);
+            eventBus.$on('toggleSys', self.isToggleSys);
         })
         
     },
-    beforeRouteEnter(to, from, next){
+    beforeRouteEnter: function(to, from, next){
         let path = from.path;
 
         eventBus.$emit('splitRouteChange', false);
@@ -118,7 +120,7 @@ console.log('mounted')
          * 判断如果不是由主页跳转过来的, 说明已经选择了系统
          */
         if(path.length !== 1){
-            next((vm) => {
+            next(function(vm) {
                 if(vm.$store.state.position){
                     vm.setSelectSys();
                 }     
@@ -127,35 +129,39 @@ console.log('mounted')
             next();
         }
     },
-    beforeRouteLeave(to, from, next){
+    beforeRouteLeave: function(to, from, next){
         eventBus.$emit('splitRouteChange', true);
         next();
     },
     methods: {
-        _getScreenList(){
-            getScreenList().then((data) => {
+        _getScreenList: function(){
+            let self = this;
+
+            getScreenList().then(function(data){
 
                 if(data.errorcode === ERR_GET_SCREEN_INFO){
                     alert(data.msg);
                 }else if(data.errorcode === SUC_CODE){
-                    this.screenList = data.data.screen;
-                    this.$store.commit(types.SET_ACTION, data.data.action);
+                    self.screenList = data.data.screen;
+                    self.$store.commit(types.SET_ACTION, data.data.action);
                 }
             })
         },
 
-        _getPlanList(){
-            getPlanList().then((data) => {
+        _getPlanList: function(){
+            let self = this;
+
+            getPlanList().then(function(data) {
 
                 if(data.errorcode === ERR_GET_PLAN_LIST){
                     alert(data.msg);
                 }else if(data.errorcode === SUC_CODE){
-                    this.planList = data.data.plans;
+                    self.planList = data.data.plans;
                 }
             })
         },
 
-        _sendScreenInstruction(){
+        _sendScreenInstruction: function(){
             let action = this.$store.state.action ? this.$store.state.action.switchScreen : null,
                 splitId = this.$store.state.splitId,
                 screenId = this.$store.state.screen.screenId,
@@ -214,7 +220,7 @@ console.log('mounted')
 
         },
 
-        _sendInstruction(data, type){
+        _sendInstruction: function(data, type){
             let _windows = [];
 
             try{
@@ -228,6 +234,7 @@ console.log('mounted')
 
             switch(type){
                 case 'screen':
+
                     // 过滤掉未选择系统的窗口
                     if(data.params.windows){
                         for(let i=0, len=data.params.windows.length; i<len; i++){
@@ -242,13 +249,12 @@ console.log('mounted')
                     // 选择预案, 不发送请求
                     // 没系统
                     // 防止多次发送同条分屏指令
-
                     if(data.params.splitId === this.$store.state.cancelSendD || data.params.windows.length === 0 || this.$store.state.planData){
                         console.log('过滤重复发送指令');
                         return;
                     }
 
-                    sendSwitchScreenIns(data).then((data) => {
+                    sendSwitchScreenIns(data).then(function(data) {
                         if(data.errorcode === ERR_SENT_TIME_OUT){
                             alert('请求超时');
                         }else if(data.errorcode === SUC_CODE){
@@ -268,7 +274,7 @@ console.log('mounted')
 
                 case 'system':
                     
-                    sendSwitchScreenIns(data).then((data) => {
+                    sendSwitchScreenIns(data).then(function(data) {
                         if(data.errorcode === ERR_SENT_TIME_OUT){
                             alert('请求超时');
                         }else if(data.errorcode === SUC_CODE){
@@ -287,7 +293,7 @@ console.log('mounted')
         },
 
         // 切换系统时, 发送指令
-        isToggleSys(){
+        isToggleSys: function(){
 console.log('切换系统');
             this._sendScreenInstruction();
         },
@@ -295,11 +301,11 @@ console.log('切换系统');
         /**
          * 设置之前选择的分屏模式
          */
-        setSelectSys(){
+        setSelectSys: function(){
             this.screen_id = this.$store.state.screen.screenId;
         },
 
-        handleScreenSelect(event){
+        handleScreenSelect: function(event){
             event.preventDefault();
             event.stopPropagation();
 
@@ -317,7 +323,7 @@ console.log('切换系统');
         },
 
         // 切换分屏模式时, 系统存在
-        isSelectSys(){
+        isSelectSys: function(){
             let screen_id = this.screen_id,
                 systems = this.$store.state.cur_sys[this.mapTable[screen_id]];
 
@@ -337,7 +343,7 @@ console.log('切换系统');
 
         },
 
-        addSelectClass(elm){
+        addSelectClass: function(elm){
             let _class = 'sc-screen-list-select',
                 elms = document.getElementsByClassName(_class);
 
@@ -347,7 +353,7 @@ console.log('切换系统');
             elm.classList.add(_class)
         },
 
-        addSelectPlanClass(elm){
+        addSelectPlanClass: function(elm){
             let _class = 'sc-screen-plan-select',
                 elms = document.getElementsByClassName(_class);
 
@@ -356,7 +362,7 @@ console.log('切换系统');
             }
             elm.classList.add(_class);
         },
-        clearSelectPlanClass(){
+        clearSelectPlanClass: function(){
             let _class = 'sc-screen-plan-select',
                 elms = document.getElementsByClassName(_class);
 
@@ -364,25 +370,25 @@ console.log('切换系统');
                 elms[i].classList.remove(_class);
             }
         },
-        setSelectId(id){
+        setSelectId: function(id){
             this.splitId = id;
             this.$store.commit(types.SET_SPLIT_ID, id);
         },
-        sendScreenId(name){
+        sendScreenId: function(name){
             this.screen_id = name;
         },
-        clickGoBack(){
+        clickGoBack: function(){
             this.$router.push({path: this.$store.state.lastPath});
             this.$store.commit(types.SET_TIP_SPLIT, false);
         },
 
-        handleSave(){
+        handleSave: function(){
             this.showSaveWindow(true);
         },
-        showSaveWindow(boo){
+        showSaveWindow: function(boo){
             this.win_condition = boo;
         },
-        hideWindow(boo){
+        hideWindow: function(boo){
             this.showSaveWindow(boo);
         },
 
@@ -390,7 +396,7 @@ console.log('切换系统');
          * 保存预案
          * @param  {string} name 预案名称
          */
-        getPlanName(plan_name){
+        getPlanName: function(plan_name){
 
             let splitId = this.$store.state.splitId,
                 screen_id = this.$store.state.screen.screenId,
@@ -420,24 +426,26 @@ console.log('切换系统');
             // POST 请求
             this._savePlan({
                 name: plan_name,
-                splitId,
-                windows 
+                splitId: splitId,
+                windows: windows 
             })
 
             this.showSaveWindow(false);
         },
-        _savePlan(data){
-            savePlan(data).then(res => {
+        _savePlan: function(data){
+            let self = this;
+
+            savePlan(data).then(function(res){
                 if(res.errorcode === SUC_CODE){
                     alert('保存成功');
-                    this._getPlanList();
+                    self._getPlanList();
                 }else{
                     alert(res.msg);
                 }
             })
         },
 
-        handleSelectPlan(item){
+        handleSelectPlan: function(item){
             let event = window.event || event;
 
             this.$store.commit(types.SET_TIP_SPLIT, true);
@@ -445,10 +453,10 @@ console.log('切换系统');
             this.clearPlan();
             this.selectPlan(item);
         },
-        clearPlan(){
+        clearPlan: function(){
             this.$store.commit(types.INIT_CUR_SYS);
         },
-        selectPlan(item){
+        selectPlan: function(item){
 
             // 如果不存在list, 就从缓存中取
             if(!this.$store.state.list.length){
@@ -477,14 +485,14 @@ console.log('切换系统');
             }
 
             this.$store.commit(types.SET_SPLIT_ID, item.splitId);
-            this.$store.commit(types.SET_PLAN_DATA, {name, windows});
+            this.$store.commit(types.SET_PLAN_DATA, {name: name, windows: windows});
 
             this._selectPlan({
                 "id": _id
             });
         },
-        _selectPlan(id){
-            sendPlanId(id).then(data => {
+        _selectPlan: function(id){
+            sendPlanId(id).then(function(data){
                 if(data.errorcode === SUC_CODE){
                     console.log('选择预案成功');
                 }else{
@@ -493,19 +501,19 @@ console.log('切换系统');
             })
         },
 
-        handleHoverPlanList(index){
+        handleHoverPlanList: function(index){
             let event = window.event || event;
 
             this.hoverPlanList(index);
         },
-        hoverPlanList(index){
+        hoverPlanList: function(index){
             this.hover_plan = index;
         },
-        handleLeavePlanList(){
+        handleLeavePlanList: function(){
             this.hover_plan = null;
         },
 
-        handleDelPlanItem(item){
+        handleDelPlanItem: function(item){
             let event = window.event || event;
 
             event.stopPropagation();
@@ -513,11 +521,13 @@ console.log('切换系统');
 
             this._delPlanItem(item.id);
         },
-        _delPlanItem(id){
-            delPlan({"id": id}).then(data => {
+        _delPlanItem: function(id){
+            let self = this;
+
+            delPlan({"id": id}).then(function(data) {
                 if(data.errorcode === SUC_CODE){
                     alert('删除成功');
-                    this._getPlanList();
+                    self._getPlanList();
                 }else{
                     alert('删除失败');
                 }
@@ -532,7 +542,7 @@ console.log('切换系统');
 // 屏幕高度 < 800px;
 @media only screen and (max-width: 1100px){
     .sc-top-box{
-        height: 5rem !important;
+        height: 4rem !important;
         .sc-menu-contain{
             height: 3rem !important;
             box-sizing: border-box;

@@ -1,7 +1,7 @@
 <!-- 主页二级菜单 -->
 <template>
 <div class="in-wraper">
-    <i class="left-btn nav-btn" @click = "handleLeft"></i>
+<!--     <i class="left-btn nav-btn" @click = "handleLeft"></i> -->
     <div class="in-screen">
         <div class="item-box">
             <span class="nav-item" :style="{'background-image': 'url(' + item.iconUrl + ')'}"
@@ -11,7 +11,7 @@
             </span>
         </div>
     </div>
-    <i class="right-btn nav-btn" @click = "handleRight"></i>
+    <!-- <i class="right-btn nav-btn" @click = "handleRight"></i> -->
     <button @click="handleGoBack" class="iw-btn-back"></button>
 </div>
 </template>
@@ -53,7 +53,7 @@ export default{
 
             for(let _i=0, _len=this.$store.state.list.length; _i<_len; _i++){
                 if(this.$store.state.list[_i].id === _l){
-                    this.list_show = this.$store.state.list[_l].subSystem;
+                    this.list_show = this.$store.state.list[_i].subSystem;
 
                     break;
                 } 
@@ -104,7 +104,6 @@ export default{
         handleClick: function(index, item){
 
             this.goNextMenu(index);
-
             this.sendInstruction(item);
         },
         goNextMenu: function(index){
@@ -171,16 +170,7 @@ console.log('最后一级菜单')
     .in-wraper{
         transform: translateY(1.15rem) !important;
         .iw-btn-back{
-            bottom: -65% !important;
-        }
-    }
-}
-
-@media only screen and (max-width: 1600px){
-    .in-wraper{
-        transform: translateY(1.5rem) !important;
-        .iw-btn-back{
-            bottom: -30% !important;
+            bottom: 0 !important;
         }
     }
 }
@@ -260,7 +250,7 @@ console.log('最后一级菜单')
     }
     .iw-btn-back{
         position: absolute;
-        bottom: -70%;
+        bottom: 0;
         right: 5%;
         width: .5rem;
         height: .5rem;

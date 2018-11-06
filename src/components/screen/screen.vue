@@ -409,8 +409,8 @@ export default{
         'screen_id': {
             handler: function(newVal, old){
 
-console.log(`旧分屏模式 -> %c ${old}`, 'color: #CD3278');
-console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
+console.log('旧分屏模式 -> %c' + old, 'color: #CD3278');
+console.log('新分屏模式 -> %c' + newVal, 'color: #9B30FF');
 
                 this.showScreen(newVal);
 
@@ -444,12 +444,12 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                         if( !this.$store.state.planData ){
 
                             try{
-                                this.$store.commit(types.TOGGLE_SCREEN_DATA, {old_mode, new_mode});
+                                this.$store.commit(types.TOGGLE_SCREEN_DATA, {old_mode: old_mode, new_mode: new_mode});
 
                                 // 通知splitScreen
                                 eventBus.$emit('toggleScreenMode');
                             }catch(error){
-                                console.log(`旧分屏模式 -> %c ${old}`, 'color: #CD3278');
+                                console.log('旧分屏模式 -> %c' + old, 'color: #CD3278');
                             }
                         }     
                     }
@@ -464,6 +464,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
         }
     },
     methods: {
+        
         /**
          * 展示哪一个分屏选项
          * @param  {string} id 分屏选项
@@ -484,6 +485,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                 }
             }
         },
+
         /**
          * 保存当前小窗口的系统名称
          * @param {string} screen_id 当前选中的分屏模式
@@ -532,6 +534,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
 
             return;
         },
+
         /**
          * 组件中点击事件的总代理
          * @param  {string} type 标识不同的按钮点击选项
@@ -544,7 +547,12 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
 
             switch(type){
                 case 'select':
-                    path = event.path[1];
+                    if(event.path){
+                        path = event.path[1];
+                    }else{
+                        path = event.target.parentNode;
+                    }
+
                     position = this.getPosition(path);
 
                     this.setCurSelectScreen(position); 
@@ -553,7 +561,12 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                     break;
 
                 case 'toggle':
-                    path = event.path[2];
+                    if(event.path){
+                        path = event.path[2];
+                    }else{
+                        path = event.target.parentNode;
+                    }
+
                     position = this.getPosition(path);
 
                     this.setCurSelectScreen(position); 
@@ -563,7 +576,12 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
                     break;
 
                 case 'clear':
-                    path = event.path[2];
+                    if(event.path){
+                        path = event.path[2];
+                    }else{
+                        path = event.target.parentNode;
+                    }
+
                     position = this.getPosition(path);
 
                     this.clearCurSystem(this.mapTable[this.screen_id], position);
@@ -575,6 +593,7 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
             }
             
         },
+
         /**
          * 将当前小窗口的位置发送给主页
          * @param {string} position 小窗口的位置
@@ -584,9 +603,16 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
             let screenId = this.screen_id,
                 wIndex = this.$store.state.cur_sys[this.mapTable[this.screen_id]][position].wIndex; // 窗口编号从0开始
 
-            this.$store.commit(types.SET_SELECT_SYS, {screenId, position, sysId: null, wIndex});
+            this.$store.commit(types.SET_SELECT_SYS, 
+                    {
+                        screenId: screenId, 
+                        position: position, 
+                        sysId: null, 
+                        wIndex: wIndex
+                    });
             this.$router.push({path: '/'});
         },
+
         /**
          * 获取节点位置
          * @param  {dom} elm 父节点
@@ -599,13 +625,14 @@ console.log(`新分屏模式 -> %c ${newVal}`, 'color: #9B30FF');
 
             return position;
         },
+
         /**
          * 清除当前小窗口选中的系统
          * @param  {string} screen_id 分屏模式
          * @param  {string} position   窗口位置
          */
         clearCurSystem: function(screen_id, position){
-            this.$store.commit(types.CLEAR_CUR_SYS, {screen_id, position});
+            this.$store.commit(types.CLEAR_CUR_SYS, {screen_id: screen_id, position: position});
         },
 
         _clearWindow: function(screen_id, position){
@@ -620,7 +647,7 @@ console.log('关闭指令');
                     "windex": wIndex,
                     "splitId": splitId   
                 }
-            }).then(data => {
+            }).then(function(data){
                 if(data.errorcode === SUC_CODE){
                     console.log('关闭指令发送成功');
                 }else{

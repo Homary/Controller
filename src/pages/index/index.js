@@ -1,5 +1,6 @@
 import index from './index.vue';
 import fontFix from '@common/js/pxToRem.js';
+import reAlert from '@common/js/reAlert.js';
 import '@common/less/index.less';
 import router from '@src/router.js';
 import store from '@src/store/index.js';
