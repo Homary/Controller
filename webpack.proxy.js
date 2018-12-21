@@ -6,6 +6,6 @@ module.exports = [{
         '/icon/*',
         '/instruction/*'
     ],
-    target: 'http://192.168.30.35:9090',
+    target: 'http://192.168.31.78:9090',
     changeOrigin: true
 }]
